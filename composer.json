@@ -1,0 +1,23 @@
+{
+  "name": "okneloper/forms",
+  "type": "library",
+  "description": "Build, control, submit and validate forms, hassle free.",
+  "keywords": ["form","forms","builder","form builder","validation","validator"],
+  "homepage": "https://github.com/okneloper/forms",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aleksey Lavrinenko",
+      "email": "okneloper@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Okneloper\\Formss\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=5.4.0"
+  }
+}
