@@ -2,7 +2,7 @@
 
 namespace Okneloper\Forms;
 
-use Oknedev\Forms\Validator;
+use Okneloper\Forms\Validator;
 use Okneloper\Forms\Elements\Checkbox;
 use Okneloper\Forms\Filters\ArrayFilter;
 use Okneloper\Forms\Filters\FilterInterface;
@@ -40,6 +40,9 @@ class Form
      */
     public function getValidator()
     {
+        if (!$this->validator) {
+            throw new \BadMethodCallException("Validator for this form is not ready yet. You should call \$form->isValid() first");
+        }
         return $this->validator;
     }
 
@@ -304,12 +307,13 @@ class Form
     {
         return [
             'required' => '{:attribute} is required',
-            'phone'    => 'Please enter a valid phone number',
+            'phone'    => '{:attribute} must be a valid phone number',
             'accepted' => 'Please accept the terms',
             'in'       => 'Please chose one of the options',
             'numeric'  => '{:attribute} should be a decimal number',
             'min'      => 'Minimum {:attribute} is :min',
             'date_format' => 'The date you have provided seems to be invalid',
+            'email'    => '{:attribute} must be a valid email address',
         ];
     }
 
