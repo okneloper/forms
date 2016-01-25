@@ -1,8 +1,8 @@
 <?php
 
-namespace Oknedev\Forms\Elements;
+namespace Okneloper\Forms\Elements;
 
-use Oknedev\Forms\Element;
+use Okneloper\Forms\Element;
 
 class Checkbox extends Element
 {
