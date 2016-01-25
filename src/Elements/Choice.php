@@ -34,13 +34,30 @@ class Choice extends Element
         throw new \BadMethodCallException("Choice element cannot be rendered");
     }
 
-    public function options($options = null)
+    /**
+     * Set or get dropdown options.
+     *
+     * @param null $options
+     * @param \Closure|null $extractOption
+     * @return $this|array
+     */
+    public function options($options = null, \Closure $extractOption = null)
     {
-        if ($options) {
-            $this->options = $options;
-            return $this;
-        } else {
+        if ($options === null) {
             return $this->options;
         }
+
+        if ($extractOption !== null) {
+            $cleanOptions = [];
+            foreach ($options as $option) {
+                list($value, $text) = $extractOption($option);
+                $cleanOptions[$value] = $text;
+            }
+            $options = $cleanOptions;
+        }
+
+        $this->options = array_merge($this->options, $options);
+
+        return $this;
     }
 }
