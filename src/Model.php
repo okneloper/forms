@@ -23,4 +23,9 @@ class Model extends \ArrayObject
     {
         unset($this[$prop]);
     }
+
+    public function toArray()
+    {
+        return $this->getArrayCopy();
+    }
 }
