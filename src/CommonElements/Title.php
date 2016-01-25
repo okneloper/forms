@@ -16,6 +16,6 @@ class Title extends Select
             $options[$title] = $title;
         }
         $attributes['options'] = $options;
-        parent::__construct($name, $attributes, $label);
+        parent::__construct($name, $label, $attributes);
     }
 }

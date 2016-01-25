@@ -8,6 +8,7 @@ namespace Okneloper\Forms;
  * @event valueChanged
  * @event attrChanged
  *
+ * @property $id
  * @property $type
  *
  * @method placeholder($value)
@@ -23,10 +24,10 @@ class Element
         static::$defaultAttributes[$name] = $value;
     }
 
-    static public function factory($type, $name, $attributes = [], $label = null)
+    static public function factory($type, $name, $label = null, $attributes = [])
     {
         $class = __NAMESPACE__ . '\\Elements\\' . ucfirst($type);
-        return new $class($name, $attributes, $label);
+        return new $class($name, $label, $attributes);
     }
 
     protected $observers = [];
@@ -71,7 +72,7 @@ class Element
         return $this->attributes + ['name' => $this->nameAttribute];
     }
 
-    public function __construct($name, $attributes = [], $label = null)
+    public function __construct($name, $label = null, $attributes = [])
     {
         $this->nameAttribute = $name;
         $name = $this->cleanName($name);
