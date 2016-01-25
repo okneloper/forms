@@ -129,8 +129,13 @@ class Element
                     'oldValue' => isset($this->attributes[$name]) ? $this->attributes[$name] : null,
                 ];
 
-                // set new value
-                $this->attributes[$name] = $value;
+                // for boolean attributes, as per HTML5 spec, we just unset the attribute if false is passed as value
+                if ($value === false) {
+                    unset($this->attributes[$name]);
+                } else {
+                    // otherwise set the new value
+                    $this->attributes[$name] = $value;
+                }
                 break;
         }
 
@@ -249,5 +254,19 @@ class Element
     {
         $value = isset($args[0]) ? $args[0] : null;
         return $this->attr($func, $value);
+    }
+
+    public function data($key, $value)
+    {
+        $this->attr("data-$key", $this->anythingToString($value));
+    }
+
+    public function anythingToString($anything)
+    {
+        if (is_array($anything) || is_object($anything)) {
+            $anything = json_encode($anything);
+            return $this->escape($anything);
+        }
+        return $anything;
     }
 }
