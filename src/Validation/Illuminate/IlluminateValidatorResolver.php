@@ -24,10 +24,34 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      */
     protected $rules;
 
-    public function __construct(\Illuminate\Container\Container $app, RuleSetInterface $rules)
+    /**
+     * Classname or resolver Closure.
+     *
+     * @var string|\Closure
+     */
+    protected $override;
+
+    /**
+     * IlluminateValidatorResolver constructor. If $override is a string, it should contain a class name of a class
+     * that extend Validator with unoverrided contructor. If you want more control, then you can  pass a closure
+     * in $override that will be set as resolver on the Factory.
+     *
+     * @param \Illuminate\Container\Container $app
+     * @param \Okneloper\Forms\Validation\Illuminate\RuleSetInterface $rules
+     * @param string|\Closure $override
+     */
+    public function __construct(\Illuminate\Container\Container $app, RuleSetInterface $rules, $override = null)
     {
         $this->app   = $app;
         $this->rules = $rules;
+
+        if (is_string($override)) {
+            $this->override = function ($translator, $data, $rules, $messages, $customAttributes) use ($override) {
+                return new $override($translator, $data, $rules, $messages, $customAttributes);
+            };
+        } else {
+            $this->override = $override;
+        }
     }
 
     /**
@@ -50,7 +74,16 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      */
     public function getValidationFactory()
     {
+        if ($this->app->resolved('validator')) {
+            return $this->app['validator'];
+        }
+
         $factory = new Factory(new IdentityTranslator(), $this->app);
+
+        if ($this->override !== null) {
+            $factory->resolver($this->override);
+        }
+
         return $factory;
     }
 
