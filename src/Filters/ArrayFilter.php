@@ -26,6 +26,7 @@ class ArrayFilter implements FilterInterface
             foreach ($value as &$arrayValue) {
                 $arrayValue = $this->filter->filter($name, $arrayValue);
             }
+            return $value;
         } else {
             return $this->filter->filter($name, $value);
         }
