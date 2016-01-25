@@ -17,7 +17,7 @@ class Choice extends Element
 
     protected $options;
 
-    public function __construct($name, $attributes = [], $label = null)
+    public function __construct($name, $label = null, $attributes = [])
     {
         if (isset($attributes['options'])) {
             $this->options = $attributes['options'];
@@ -26,7 +26,7 @@ class Choice extends Element
             $this->options = [];
         }
 
-        parent::__construct($name, $attributes, $label);
+        parent::__construct($name, $label, $attributes);
     }
 
     public function render()

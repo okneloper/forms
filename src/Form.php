@@ -90,12 +90,12 @@ class Form
     /**
      * @param $type
      * @param null $name
-     * @param array $attribs
      * @param null $label
+     * @param array $attribs
      * @return Element
      * @throws \Exception
      */
-    public function add($type, $name = null, $attribs = [], $label = null)
+    public function add($type, $name = null, $label = null, $attribs = [])
     {
         if ($type instanceof Element) {
             $this->addElement($type);
@@ -104,7 +104,7 @@ class Form
             if (!$name) {
                 throw new \Exception("Name not specified");
             }
-            $el = Element::factory($type, $name, $attribs, $label);
+            $el = Element::factory($type, $name, $label, $attribs);
             $this->addElement($el);
             return $el;
         }
