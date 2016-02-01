@@ -56,7 +56,9 @@ class Choice extends Element
             $options = $cleanOptions;
         }
 
-        $this->options = array_merge($this->options, $options);
+        // we cannot use array_merge on $options from a database like [id] => value, because [id] is numeric key
+        // and as per array_merge documentation, number indexes will be reset
+        $this->options = array_replace($this->options, $options);
 
         return $this;
     }
