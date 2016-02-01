@@ -67,4 +67,15 @@ class Choice extends Element
 
         return $this;
     }
+
+    public function clearOptions()
+    {
+        $this->options = [];
+        return $this;
+    }
+
+    public function listValues($delimiter = ',')
+    {
+        return implode($delimiter, array_keys($this->options));
+    }
 }
