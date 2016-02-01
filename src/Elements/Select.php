@@ -8,9 +8,16 @@ class Select extends Choice
 {
     protected $type = 'select';
 
+    protected $emptyOption = [];
+
     public function render()
     {
         $return = '<select ' . $this->buildAttrs($this->getAttributes()) . '>' . PHP_EOL;
+        if ($this->emptyOption) {
+            $val = key($this->emptyOption);
+            $text = $this->emptyOption[$val];
+            $return .= "<option value=\"$val\">{$this->escape($text)}</option>" . PHP_EOL;
+        }
         foreach ($this->options as $val => $text) {
             $selected = $this->selected($val) ? ' selected' : '';
             $return .= "<option value=\"$val\" $selected>{$this->escape($text)}</option>" . PHP_EOL;
@@ -89,5 +96,11 @@ class Select extends Choice
             unset($attrs['value']);
         }
         return parent::buildAttrs($attrs);
+    }
+
+    public function emptyOption($text = null, $value = '')
+    {
+        $this->emptyOption = [$value => $text];
+        return $this;
     }
 }
