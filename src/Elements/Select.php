@@ -2,7 +2,7 @@
 
 namespace Okneloper\Forms\Elements;
 
-use Okneloper\Forms\Exceptions\InvalidMultipleValueException;
+use Okneloper\Forms\Exceptions\NotArrayException;
 
 class Select extends Choice
 {
@@ -79,7 +79,7 @@ class Select extends Choice
     public function assertMultipleValueIsArray($value)
     {
         if ($this->multiple() && !is_array($value)) {
-            throw new InvalidMultipleValueException($value);
+            throw new NotArrayException($value);
         }
     }
 

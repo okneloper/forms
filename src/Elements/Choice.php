@@ -3,6 +3,7 @@
 namespace Okneloper\Forms\Elements;
 
 use Okneloper\Forms\Element;
+use Okneloper\Forms\Exceptions\NotArrayException;
 
 /**
  *
@@ -54,6 +55,10 @@ class Choice extends Element
                 $cleanOptions[$value] = $text;
             }
             $options = $cleanOptions;
+        }
+
+        if (!is_array($options)) {
+            throw new NotArrayException($options, "Choice element");
         }
 
         // we cannot use array_merge on $options from a database like [id] => value, because [id] is numeric key

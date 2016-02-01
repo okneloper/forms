@@ -5,11 +5,11 @@
  */
 namespace Okneloper\Forms\Exceptions;
 
-class InvalidMultipleValueException extends \Exception
+class NotArrayException extends \Exception
 {
-    public function __construct($value)
+    public function __construct($value, $what)
     {
-        $message = "Value for select[multiple] should be an array. ";
+        $message = "Value for $what should be an array. ";
         if (is_object($value)) {
             $type = get_class($value);
             $message .= "Instance of $type was provided";
