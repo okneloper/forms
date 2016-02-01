@@ -118,7 +118,6 @@ class Form
         // store element
         $this->elements[$element->name] = $element;
 
-
         // assign default value from bound model
         if ($this->modelAssigned() && isset($this->model->{$element->name})) {
             $element->val($this->model->{$element->name});
@@ -309,7 +308,7 @@ class Form
             'required' => '{:attribute} is required',
             'phone'    => '{:attribute} must be a valid phone number',
             'accepted' => 'Please accept the terms',
-            'in'       => 'Please chose one of the options',
+            'in'       => 'Please chose one of the options for {:attribute}',
             'numeric'  => '{:attribute} should be a decimal number',
             'min'      => 'Minimum {:attribute} is :min',
             'date_format' => 'The date you have provided seems to be invalid',
