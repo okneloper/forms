@@ -80,9 +80,9 @@ class Form
     {
         $this->observer = new Observer($this);
 
-        $this->bind($model);
-
         $this->initElements();
+
+        $this->bind($model);
     }
 
     public function initElements()
@@ -163,6 +163,11 @@ class Form
      */
     public function bind($model)
     {
+        // default to an empty array
+        if ($model === null) {
+            $model = [];
+        }
+
         if (is_array($model)) {
             $model = new Model($model);
         }
