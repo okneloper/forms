@@ -37,12 +37,16 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      * in $override that will be set as resolver on the Factory.
      *
      * @param \Illuminate\Container\Container $app
-     * @param \Okneloper\Forms\Validation\Illuminate\RuleSetInterface $rules
+     * @param \Okneloper\Forms\Validation\Illuminate\RuleSetInterface|\Closure|array $rules
      * @param string|\Closure $override
      */
-    public function __construct(\Illuminate\Container\Container $app, RuleSetInterface $rules, $override = null)
+    public function __construct(\Illuminate\Container\Container $app, $rules, $override = null)
     {
         $this->app   = $app;
+
+        if (!($rules instanceof RuleSetInterface) && !($rules instanceof \Closure) && !is_array($rules)) {
+            throw new \BadMethodCallException('$rules must be an array or an instance of Okneloper\Forms\Validation\Illuminate\RuleSetInterface or Closure');
+        }
         $this->rules = $rules;
 
         if (is_string($override)) {
@@ -60,7 +64,14 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      */
     public function resolve(\Okneloper\Forms\Form $form)
     {
-        $rules = $this->rules->bootValidatorRules($form);
+        if ($this->rules instanceof RuleSetInterface) {
+            $rules = $this->rules->bootValidatorRules($form);
+        } elseif ($this->rules instanceof \Closure) {
+            $rules = call_user_func($this->rules);
+        } else {
+            // $this->rules is an array
+            $rules = $this->rules;
+        }
         $messages = $form->bootErrorMessages();
 
         $laravelValidator = $this->makeValidator($form, $form->modelToArray(), $rules, $messages);
