@@ -85,7 +85,7 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      */
     public function getValidationFactory()
     {
-        if ($this->app->resolved('validator')) {
+        if (isset($this->app['validator'])) {
             return $this->app['validator'];
         }
 
