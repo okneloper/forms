@@ -9,14 +9,15 @@ use Okneloper\Forms\Validation\ValidatorResolverInterface;
 
 class RespectValidatorResolver implements ValidatorResolverInterface
 {
-    /**
-     * @var RespectFormValidator
-     */
-    protected $formValidator;
+    protected $rules;
 
-    public function __construct(RespectFormValidator $formValidator)
+    /**
+     * RespectValidatorResolver constructor.
+     * @param array<RespectValidator> $rules
+     */
+    public function __construct($rules)
     {
-        $this->formValidator = $formValidator;
+        $this->rules = $rules;
     }
 
     /**
@@ -25,6 +26,6 @@ class RespectValidatorResolver implements ValidatorResolverInterface
      */
     public function resolve(\Okneloper\Forms\Form $form)
     {
-        return new RespectValidator($form, $this->formValidator);
+        return new RespectValidator($form, $this->rules);
     }
 }

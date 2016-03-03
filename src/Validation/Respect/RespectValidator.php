@@ -5,9 +5,11 @@
  */
 namespace Okneloper\Forms\Validation\Respect;
 
+use Okneloper\Forms\Element;
 use Okneloper\Forms\Form;
 use Okneloper\Forms\Validation\ValidatorInterface;
 use Respect\Validation\Validator;
+use Respect\Validation\Validator as v;
 
 class RespectValidator implements ValidatorInterface
 {
@@ -21,12 +23,19 @@ class RespectValidator implements ValidatorInterface
      */
     protected $form;
 
-    protected $formValidator;
+    protected $rules = [];
 
-    public function __construct(Form $form, RespectFormValidator $formValidator)
+    protected $errorMessages = [];
+
+    /**
+     * RespectValidator constructor.
+     * @param Form $form
+     * @param $rules
+     */
+    public function __construct(Form $form, $rules)
     {
         $this->form = $form;
-        $this->formValidator = $formValidator;
+        $this->rules = $rules;
     }
 
     /**
@@ -35,11 +44,33 @@ class RespectValidator implements ValidatorInterface
      */
     public function validateForm(Form $form)
     {
-        return $this->formValidator->validateForm($form);
+        $errors = [];
+        $elements = $form->getElements();
+
+        foreach ($elements as $element) { /* @var $element Element */
+            if (isset($this->rules[$element->name])) {
+                $respect = $this->rules[$element->name];
+                if (!$respect->validate($element->val())) {
+                    $errors[$element->name] = true;
+                }
+            }
+        }
+
+        if ($errors) {
+            $allErrorMessages = $form->bootErrorMessages();
+            foreach ($errors as $field => &$error) {
+                $label = $elements[$field]->label ?: $field;
+                $error = isset($allErrorMessages[$field]) ? $allErrorMessages[$field] : "{$label} is not valid";
+            }
+        }
+
+        $this->errorMessages = $errors;
+
+        return empty($errors);
     }
 
     public function getErrorMessages()
     {
-        return $this->formValidator->getErrorMessages();
+        return $this->errorMessages;
     }
 }
