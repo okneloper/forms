@@ -15,12 +15,25 @@ use Okneloper\Forms\Validation\ValidationException;
 use Okneloper\Forms\Validation\ValidatorInterface;
 
 /**
- * Class Form. Represents a form that can submitted and validated.
+ * Class Form. Represents a form that can be submitted and validated.
  *
  * @package Okneloper\Forms
  */
 class Form
 {
+    /**
+     * @var \Closure
+     */
+    protected static $moreErrorMessages = [];
+
+    /**
+     * @param \Closure|array $moreErrorMessages
+     */
+    public static function addMoreMessages($moreErrorMessages)
+    {
+        static::$moreErrorMessages[] = $moreErrorMessages;
+    }
+
     /**
      * Form elements
      * @var array
@@ -403,7 +416,7 @@ class Form
 
     public function bootErrorMessages()
     {
-        return [
+        $messages = [
             'required' => '{:attribute} is required',
             'phone'    => '{:attribute} must be a valid phone number',
             'accepted' => 'Please accept the terms',
@@ -413,6 +426,16 @@ class Form
             'date_format' => 'The date you have provided seems to be invalid',
             'email'    => '{:attribute} must be a valid email address',
         ];
+
+        // merge all the message that were added overriding default messages if overriding messages provided
+        foreach ($this::$moreErrorMessages as $moreMessages) {
+            if ($moreMessages instanceof \Closure) {
+                $moreMessages = $moreMessages();
+            }
+            $messages = array_merge($messages, $moreMessages);
+        }
+
+        return $messages;
     }
 
     public function bootFilters()
