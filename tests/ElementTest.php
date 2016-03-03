@@ -1,11 +1,9 @@
 <?php
 
-
-use Oknedev\Forms\Element;
-
 class ElementTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Test if name[] style names are processed correctly
      * @dataProvider namesProvider
      *
      * @param $name
@@ -13,7 +11,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
      */
     public function testCleansName($name, $expected)
     {
-        $el = new Element($name, []);
+        $el = new \Okneloper\Forms\Element($name, []);
         $this->assertEquals($el->name, $expected);
     }
 
