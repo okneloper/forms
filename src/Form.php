@@ -1,9 +1,12 @@
 <?php
-
+/*
+ * This file is part of the Forms package.
+ *
+ * (c) Aleksey Lavrinenko <okneloper@gmail.com>
+ */
 namespace Okneloper\Forms;
 
 use Okneloper\Forms\Validator;
-use Okneloper\Forms\Elements\Checkbox;
 use Okneloper\Forms\Filters\ArrayFilter;
 use Okneloper\Forms\Filters\FilterInterface;
 use Okneloper\Forms\Filters\NativeFilter;
@@ -11,31 +14,64 @@ use Okneloper\Forms\Validation\ValidatorResolverInterface;
 use Okneloper\Forms\Validation\ValidationException;
 use Okneloper\Forms\Validation\ValidatorInterface;
 
+/**
+ * Class Form. Represents a form that can submitted and validated.
+ *
+ * @package Okneloper\Forms
+ */
 class Form
 {
+    /**
+     * Form elements
+     * @var array
+     */
     protected $elements = [];
 
+    /**
+     * Form model. Defaults to a new instance of Okneloper\Forms\Model. Can be any object, form values will be
+     * assigned to public properties.
+     * @var Model|mixed
+     */
     protected $model;
 
-    protected $values = [];
-
+    /**
+     * Observes for changes on the element values to keep the model up to date.
+     * @var Observer
+     */
     protected $observer;
 
+    /**
+     * True when the form was submitted (submit() was called)
+     * @var bool
+     */
     protected $submitted = false;
 
+    /**
+     * Form errors after last validation.
+     * @var array
+     */
     protected $errors = [];
 
     /**
+     * The ValidatorResolverInterface implementation
      * @var ValidatorResolverInterface
      */
     protected $validatorResolver;
 
     /**
+     * The ValidatorInterface implementation
      * @var ValidatorInterface
      */
     protected $validator;
 
     /**
+     * Filters to be applied on form submission.
+     * @var array<FilterInterface>
+     */
+    protected $filters = [];
+
+    /**
+     * Get resolved validator
      * @return ValidatorInterface
      */
     public function getValidator()
@@ -76,6 +112,36 @@ class Form
         return $this->elements;
     }
 
+    /**
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @param array $filters
+     * @return Form
+     */
+    public function setFilters($filters)
+    {
+        $this->filters = $filters;
+        return $this;
+    }
+
+    /**
+     * Form constructor.
+     * @param array|object $model Model to bind
+     */
     public function __construct($model = [])
     {
         $this->observer = new Observer($this);
@@ -85,13 +151,21 @@ class Form
         $this->bind($model);
     }
 
+    /**
+     * Override this method to initialize elements when extending the form
+     */
     public function initElements()
     {
         // override this method
     }
 
     /**
-     * @param $type
+     * Universal Add function.
+     * Add an element to the form. If $type is a string, it will be used as class name in one of the registered
+     * namespaces (currently only Okneloper\Forms\Elements) along with other constructor arguments.
+     * If an instance of Element is passed, the element is added and other arguments are ignored.
+     *
+     * @param string|Element $type
      * @param null $name
      * @param null $label
      * @param array $attribs
@@ -113,6 +187,10 @@ class Form
         }
     }
 
+    /**
+     * Add an instance of Element to the form.
+     * @param Element $element
+     */
     public function addElement(Element $element)
     {
         // store element
@@ -128,8 +206,10 @@ class Form
     }
 
     /**
+     * Get element by it's name.
      * @param $name
      * @return Element
+     * @throws \Exception
      */
     public function el($name)
     {
@@ -139,14 +219,18 @@ class Form
         return $this->elements[$name];
     }
 
+    /**
+     * Returns true if form has element with this name.
+     * @param $name
+     * @return bool
+     */
     public function has($name)
     {
         return isset($this->elements[$name]);
     }
 
     /**
-     * Get value of the element with name
-     *
+     * Returns value of the element with name $name.
      * @param $name
      * @return string
      */
@@ -159,6 +243,7 @@ class Form
     }
 
     /**
+     * Bind a model to the form
      * @param array|object $model
      */
     public function bind($model)
@@ -180,7 +265,7 @@ class Form
     }
 
     /**
-     * Check if model has been assigned
+     * Returns true if model has been assigned.
      * @return bool
      */
     public function modelAssigned()
@@ -189,18 +274,28 @@ class Form
     }
 
     /**
-     * @return \ArrayObject|object
+     * @return \Model|object
      */
     public function getModel()
     {
         return $this->model;
     }
 
-    public function updateModel($name, $value)
+    /**
+     * Update a value on the model.
+     * @param $key
+     * @param $value
+     */
+    public function updateModel($key, $value)
     {
-        $this->model->$name = $value;
+        $this->model->$key = $value;
     }
 
+    /**
+     * 'Submit' the form - assign the data coming from the submitted frontend form.
+     * @param $data
+     * @throws \Exception
+     */
     public function submit($data)
     {
         $this->submitted = true;
@@ -225,12 +320,17 @@ class Form
         }
     }
 
+    /**
+     * Applies filters to the data and returns filtered data.
+     * @param $data
+     * @return mixed
+     * @throws \Exception
+     */
     public function applyFilters($data)
     {
         $filters = $this->bootFilters();
 
-        foreach ($data as $k => &$v)
-        {
+        foreach ($data as $k => &$v) {
             if (isset($filters[$k])) {
                 $filter = $filters[$k];
                 if (is_object($filter)) {
@@ -263,7 +363,11 @@ class Form
         return $data;
     }
 
-
+    /**
+     * Validates the form and returns true if the submitted data is valid.
+     * @return bool
+     * @throws ValidationException
+     */
     public function isValid()
     {
         if (!$this->validator) {
@@ -277,20 +381,10 @@ class Form
         return $passes;
     }
 
-    public function errorMessages()
-    {
-        if (!$this->validator) {
-            throw new \BadMethodCallException("Error message are only available after the form has been submitted and validated");
-        }
-
-        return $this->validator->getErrorMessages();
-    }
-
-
     /**
-     * Override this function to provide a suitable validator
-     *
-     * @return Validator
+     * Resolves end returns a validator.
+     * @return \Okneloper\Forms\Validator
+     * @throws ValidationException
      */
     public function bootValidator()
     {
@@ -323,14 +417,11 @@ class Form
 
     public function bootFilters()
     {
-        return [];
+        return $this->filters;
     }
-
-
 
     /**
      * Get plain array of model data for validation
-     *
      * @param null $model
      * @return array
      */
@@ -341,14 +432,18 @@ class Form
         }
 
         $array = [];
-        foreach ($this->elements as $el)
-        {
+        foreach ($this->elements as $el) {
             $array[$el->name] = $model->{$el->name};
         }
 
         return $array;
     }
 
+    /**
+     * Return error for the field name of null if no errors were registered for the field.
+     * @param $field
+     * @return null
+     */
     public function error($field)
     {
         return isset($this->errors[$field]) ? $this->errors[$field] : null;
