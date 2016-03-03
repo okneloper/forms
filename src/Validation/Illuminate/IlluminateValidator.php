@@ -22,10 +22,13 @@ class IlluminateValidator implements ValidatorInterface
      */
     protected $form;
 
-    public function __construct(Form $form, Validator $validator)
+    protected $reportIlluminateErrors;
+
+    public function __construct(Form $form, Validator $validator, $reportIlluminateErrors = true)
     {
         $this->validator = $validator;
         $this->form = $form;
+        $this->reportIlluminateErrors = $reportIlluminateErrors;
     }
 
     /**
@@ -44,6 +47,21 @@ class IlluminateValidator implements ValidatorInterface
     public function getErrorMessages()
     {
         $allMessages = $this->validator->messages()->getMessages();
+
+        if (!$this->reportIlluminateErrors) {
+            $availableErrorMessages = $this->form->bootErrorMessages();
+            $plainMessages = [];
+            foreach ($allMessages as $fieldName => $message) {
+                $message = isset($availableErrorMessages[$fieldName])
+                    ? $availableErrorMessages[$fieldName]
+                    : "{attribute} is not valid";
+                // array of 1 element for compatibility with Laravel's MessageBag
+                $message = str_replace('{:attribute}', '{' . $fieldName . '}', $message);
+                $plainMessages[$fieldName] = [$message];
+            }
+            $allMessages = $plainMessages;
+        }
+
         foreach ($allMessages as $fieldName => &$messages) {
             foreach ($messages as &$message) {
                 $search = str_replace('_', ' ', $fieldName);

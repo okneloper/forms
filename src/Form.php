@@ -35,6 +35,14 @@ class Form
     }
 
     /**
+     * @param \Closure $moreErrorMessages
+     */
+    public static function setMoreErrorMessages($moreErrorMessages)
+    {
+        static::$moreErrorMessages = $moreErrorMessages;
+    }
+
+    /**
      * Form elements
      * @var array
      */

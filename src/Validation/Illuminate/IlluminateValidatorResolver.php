@@ -31,6 +31,8 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      */
     protected $override;
 
+    public $reportIlluminateErrors;
+
     /**
      * IlluminateValidatorResolver constructor. If $override is a string, it should contain a class name of a class
      * that extend Validator with unoverrided contructor. If you want more control, then you can  pass a closure
@@ -40,7 +42,7 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
      * @param \Okneloper\Forms\Validation\Illuminate\RuleSetInterface|\Closure|array $rules
      * @param string|\Closure $override
      */
-    public function __construct(\Illuminate\Container\Container $app, $rules, $override = null)
+    public function __construct(\Illuminate\Container\Container $app, $rules, $reportIlluminateErrors = true, $override = null)
     {
         $this->app   = $app;
 
@@ -48,6 +50,8 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
             throw new \BadMethodCallException('$rules must be an array or an instance of Okneloper\Forms\Validation\Illuminate\RuleSetInterface or Closure');
         }
         $this->rules = $rules;
+
+        $this->reportIlluminateErrors = $reportIlluminateErrors;
 
         if (is_string($override)) {
             $this->override = function ($translator, $data, $rules, $messages, $customAttributes) use ($override) {
@@ -76,7 +80,7 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
 
         $laravelValidator = $this->makeValidator($form, $form->modelToArray(), $rules, $messages);
 
-        return new IlluminateValidator($form, $laravelValidator);
+        return new IlluminateValidator($form, $laravelValidator, $this->reportIlluminateErrors);
     }
 
 
