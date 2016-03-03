@@ -423,7 +423,8 @@ class Form
             'in'       => 'Please chose one of the options for {:attribute}',
             'numeric'  => '{:attribute} should be a decimal number',
             'min'      => 'Minimum {:attribute} is :min',
-            'date_format' => 'The date you have provided seems to be invalid',
+            'date_format' => '{:attribute} is not in the required date format',
+            'date'     => 'Value of \'{:attribute}\' could not be transformed to a date',
             'email'    => '{:attribute} must be a valid email address',
         ];
 
