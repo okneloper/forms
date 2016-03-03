@@ -2,12 +2,8 @@
 
 namespace Okneloper\Forms\Elements;
 
-use Okneloper\Forms\Element;
-
-class Email extends Element
+class Email extends Text
 {
-    static protected $defaultAttributes = ['class' => 'text'];
-
     protected $type = 'email';
 
 }
