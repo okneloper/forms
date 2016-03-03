@@ -29,7 +29,7 @@ class Form
     /**
      * @param \Closure|array $moreErrorMessages
      */
-    public static function addMoreMessages($moreErrorMessages)
+    public static function addMoreErrorMessages($moreErrorMessages)
     {
         static::$moreErrorMessages[] = $moreErrorMessages;
     }
