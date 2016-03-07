@@ -17,5 +17,10 @@ class Observer
     public function valueChanged(Element $element, $params)
     {
         $this->form->updateModel($element->name, $element->val());
+        // if value on the model has been transformed in some way, assign it back to element
+        $modelValue = $this->form->getModel()->{$element->name};
+        if ($modelValue != $element->val()) {
+            $element->val($modelValue);
+        }
     }
 }
