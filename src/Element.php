@@ -99,7 +99,7 @@ class Element
     public function attr($name, $value = null)
     {
         if ($value === null) {
-            switch($name) {
+            switch ($name) {
                 case 'type':
                     return $this->$name;
                     break;

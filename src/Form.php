@@ -323,7 +323,7 @@ class Form
 
         $data = $this->applyFilters($data);
 
-        foreach ($this->elements as $el) {
+        foreach ($this->elements as $el) { /* @var $el Element */
             $value = isset($data[$el->name]) ? $data[$el->name] : null;
             $el->val($value);
             /*
