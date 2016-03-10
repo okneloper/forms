@@ -80,6 +80,10 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
 
         $laravelValidator = $this->makeValidator($form, $form->modelToArray(), $rules, $messages);
 
+        if ($this->rules instanceof ComplexRuleSetInterface) {
+            $this->rules->addMoreValidatorRules($form, $laravelValidator);
+        }
+
         return new IlluminateValidator($form, $laravelValidator, $this->reportIlluminateErrors);
     }
 
