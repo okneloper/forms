@@ -15,6 +15,16 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($el->name, $expected);
     }
 
+    public function testDisables()
+    {
+        $el = new \Okneloper\Forms\Element('test');
+        #$this->assertSame(false, $el->attr('disabled'));
+        $this->assertSame(null, $el->attr('disabled'));
+
+        $el->disable();
+        $this->assertSame(true, $el->attr('disabled'));
+    }
+
     public function namesProvider()
     {
         return [

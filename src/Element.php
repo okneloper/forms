@@ -261,6 +261,20 @@ class Element
         $this->attr("data-$key", $this->anythingToString($value));
     }
 
+    /**
+     * Get 'disabled' state of the element
+     * @return Element
+     */
+    public function disabled($value = null)
+    {
+        return $this->attr('disabled');
+    }
+
+    public function disable()
+    {
+        return $this->attr('disabled', true);
+    }
+
     public function anythingToString($anything)
     {
         if (is_array($anything) || is_object($anything)) {

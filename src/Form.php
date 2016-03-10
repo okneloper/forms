@@ -324,6 +324,11 @@ class Form
         $data = $this->applyFilters($data);
 
         foreach ($this->elements as $el) { /* @var $el Element */
+            // do not assign values for disabled elements, these are supposed to not be present among the form data
+            if ($el->disabled()) {
+                continue;
+            }
+
             $value = isset($data[$el->name]) ? $data[$el->name] : null;
             $el->val($value);
             /*
