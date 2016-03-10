@@ -359,23 +359,6 @@ class Form
         foreach ($data as $k => &$v) {
             if (isset($filters[$k])) {
                 $filter = $filters[$k];
-                if (is_object($filter)) {
-                    if (!($filter instanceof FilterInterface)) {
-                        throw new \Exception("Filter object should implement FilterInterface.");
-                    }
-                } else {
-                    // cast to array
-                    if (!is_array($filter)) {
-                        $filter = [$filter];
-                    }
-
-                    // add second argument
-                    if (!isset($filter[1])) {
-                        $filter[1] = null;
-                    }
-
-                    $filter = new NativeFilter($filter[0], $filter[1]);
-                }
             } else {
                 $filter = new NativeFilter(FILTER_SANITIZE_STRING);
                 if (is_array($v)) {
@@ -383,10 +366,50 @@ class Form
                 }
             }
 
-            $v = $filter->filter($k, $v);
+            $v = $this->applyFilter($filter, $k, $v);
         }
 
         return $data;
+    }
+
+
+    /**
+     * Apply filter or array of filters to a form value
+     *
+     * @param $filter
+     * @param $key
+     * @param $value
+     * @return mixed|string
+     * @throws \Exception
+     */
+    protected function applyFilter($filter, $key, $value)
+    {
+        if (is_array($filter)) {
+            // call the function recursively to apply every filter i the array
+            foreach ($filter as $singleFilter) {
+                $value = $this->applyFilter($singleFilter, $key, $value);
+            }
+        } else {
+            if (is_object($filter)) {
+                if (!($filter instanceof FilterInterface)) {
+                    throw new \Exception("Filter object should implement FilterInterface.");
+                }
+            } else {
+                // cast to array
+                if (!is_array($filter)) {
+                    $filter = [$filter];
+                }
+
+                // add second argument
+                if (!isset($filter[1])) {
+                    $filter[1] = null;
+                }
+
+                $filter = new NativeFilter($filter[0], $filter[1]);
+            }
+
+            return $filter->filter($key, $value);
+        }
     }
 
     /**
