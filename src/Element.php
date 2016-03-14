@@ -199,9 +199,9 @@ class Element
     protected function buildAttr($name, $value)
     {
         #$value = $this->attr($name);
-        // HTML5 syntax for boolean attributes
-        if ($value === true) {
-            return $name;
+        // HTML5 syntax for boolean attributes: attribute name or nothing
+        if (is_bool($value)) {
+            return $value ? $name : '';
         }
         // regular syntax
         return sprintf('%s="%s"', $name, $name === 'value' ? $this->escape($value) : $value);
