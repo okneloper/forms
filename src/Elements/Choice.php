@@ -78,4 +78,17 @@ class Choice extends Element
     {
         return implode($delimiter, array_keys($this->options));
     }
+
+    /**
+     * Get the display value of the option of current value
+     * @return string
+     */
+    public function valueText()
+    {
+        $value = $this->val();
+        if ($value === null || !isset($this->options[$value])) {
+            return '';
+        }
+        return $this->options[$value];
+    }
 }
