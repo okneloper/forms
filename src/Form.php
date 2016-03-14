@@ -329,7 +329,7 @@ class Form
                 continue;
             }
 
-            $value = isset($data[$el->name]) ? $data[$el->name] : null;
+            $value = isset($data[$el->name]) ? $data[$el->name] : '';
             $el->val($value);
             /*
             if ($el instanceof Checkbox) {

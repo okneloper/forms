@@ -27,7 +27,8 @@ class Checkbox extends Element
                 'oldValue' => $this->attr('checked'),
             ];
 
-            $this->checkedIf($this->attr('value') == $value);
+            // @todo should it be === ?
+            $this->attr('checked', $this->attr('value') == $value);
 
             $this->trigger('valueChanged', $eventParams);
 
