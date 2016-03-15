@@ -1,4 +1,5 @@
 <?php
+use Okneloper\Forms\Filters\NativeFilter;
 
 /**
  * @coversDefaultClass \Okneloper\Forms\Form
@@ -17,5 +18,27 @@ class FormTest extends PHPUnit_Framework_TestCase
             'test' => '<script>script goes here</script>',
         ]);
         $this->assertEquals('script goes here', $form->val('test'));
+    }
+
+    public function testAppliesArrayOdFilters()
+    {
+        $filter1 = new NativeFilter(FILTER_SANITIZE_STRING);
+        $filter2 = new NativeFilter(FILTER_SANITIZE_NUMBER_INT);
+
+        $input = 'x11';
+
+        $filtered = $filter1->filter('test', $input);
+        $filtered = $filter2->filter('test', $filtered);
+
+        $form = new \Okneloper\Forms\Form();
+        $form->add('text', 'test');
+
+        $form->setFilters([
+            'test' => [$filter1, $filter2],
+        ]);
+
+        $form->submit(['test' => $input]);
+
+        $this->assertSame($filtered, $form->val('test'));
     }
 }
