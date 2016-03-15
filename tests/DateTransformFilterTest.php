@@ -15,10 +15,10 @@ class DateTransformFilterTest extends PHPUnit_Framework_TestCase
     public function testFiltersValidDate()
     {
         $filter = new \Okneloper\Forms\Filters\DateTransformFilter('d/m/Y', 'Y-m-d');
-        $this->assertEquals('2016-03-03', $filter->filter('date', '03/03/2016'));
+        $this->assertEquals('2016-03-16', $filter->filter('date', '16/03/2016'));
 
         $filter = new \Okneloper\Forms\Filters\DateTransformFilter('d/m/Y', 'd.m.Y');
-        $this->assertEquals('03.03.2016', $filter->filter('date', '03/03/2016'));
+        $this->assertEquals('16.03.2016', $filter->filter('date', '16/03/2016'));
     }
 
     /**
@@ -27,7 +27,7 @@ class DateTransformFilterTest extends PHPUnit_Framework_TestCase
     public function testDefaultToFormatIsISO()
     {
         $filter = new \Okneloper\Forms\Filters\DateTransformFilter('d/m/Y');
-        $this->assertEquals('2016-03-03', $filter->filter('date', '03/03/2016'));
+        $this->assertEquals('2016-03-16', $filter->filter('date', '16/03/2016'));
     }
 
     /**
