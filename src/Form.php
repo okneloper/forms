@@ -389,6 +389,7 @@ class Form
             foreach ($filter as $singleFilter) {
                 $value = $this->applyFilter($singleFilter, $key, $value);
             }
+            return $value;
         } else {
             if (is_object($filter)) {
                 if (!($filter instanceof FilterInterface)) {
