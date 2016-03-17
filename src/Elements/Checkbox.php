@@ -35,7 +35,8 @@ class Checkbox extends Element
             return $this;
         }
 
-        return $this->attr('checked') ? $this->attr('value') : false;
+        // when a checkbox is not checked, the value of it is null (ie not set)
+        return $this->attr('checked') ? $this->attr('value') : null;
     }
 
     public function attr($name, $value = null)
