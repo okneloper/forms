@@ -6,6 +6,8 @@
 namespace Okneloper\Forms\Validation\Illuminate;
 
 use Illuminate\Validation\Validator;
+use Okneloper\Forms\Element;
+use Okneloper\Forms\Elements\Choice;
 use Okneloper\Forms\Form;
 use Okneloper\Forms\Validation\ValidationException;
 use Okneloper\Forms\Validation\ValidatorInterface;
@@ -55,8 +57,8 @@ class IlluminateValidator implements ValidatorInterface
                 $message = isset($availableErrorMessages[$fieldName])
                     ? $availableErrorMessages[$fieldName]
                     : "{attribute} is not valid";
-                // array of 1 element for compatibility with Laravel's MessageBag
                 $message = str_replace('{:attribute}', '{' . $fieldName . '}', $message);
+                // array of 1 element for compatibility with Laravel's MessageBag
                 $plainMessages[$fieldName] = [$message];
             }
             $allMessages = $plainMessages;
@@ -64,8 +66,23 @@ class IlluminateValidator implements ValidatorInterface
 
         foreach ($allMessages as $fieldName => &$messages) {
             foreach ($messages as &$message) {
-                $search = str_replace('_', ' ', $fieldName);
-                $message = str_replace('{' . $search . '}', $this->form->el($fieldName)->label, $message);
+                $searchField = str_replace('_', ' ', $fieldName);
+                $searchField = '{' . $searchField . '}';
+
+                $element = $this->form->el($fieldName);
+                /* @var $element Element */
+                $replace = [
+                    $searchField => $element->label,
+                    // escape the value for safe output of html messages
+                    '{value}' => htmlspecialchars($element->val(), ENT_NOQUOTES, 'UTF-8'),
+                ];
+
+                // for choice elements add option to output the text value of an option
+                if ($element instanceof Choice) {
+                    $replace['{valueText}'] = $element->valueText();
+                }
+
+                $message = str_replace(array_keys($replace), array_values($replace), $message);
             }
 
             $messages = implode(', ', $messages);

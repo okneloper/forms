@@ -461,8 +461,8 @@ class Form
             'numeric'  => '{:attribute} should be a decimal number',
             'min'      => 'Minimum {:attribute} is :min',
             'date_format' => '{:attribute} is not in the required date format',
-            'date'     => 'Value of \'{:attribute}\' could not be transformed to a date',
-            'email'    => '{:attribute} must be a valid email address',
+            'date'     => '\'{value}\' could not be transformed to a date',
+            'email'    => '{value} is not a valid email address',
         ];
 
         // merge all the message that were added overriding default messages if overriding messages provided
