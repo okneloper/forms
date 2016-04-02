@@ -51,7 +51,17 @@ class Choice extends Element
         if ($extractOption !== null) {
             $cleanOptions = [];
             foreach ($options as $option) {
-                list($value, $text) = $extractOption($option);
+                $thisOption = $extractOption($option);
+                if (!is_array($thisOption)) {
+                    throw new \RuntimeException("Options closure must return an array, " . gettype($thisOption) . " returned");
+                }
+                if (count($thisOption) == 1) {
+                    // accept arrays like [value => text]
+                    list($value, $text) = each($thisOption);
+                } else {
+                    // or like [value, text]
+                    list($value, $text) = $thisOption;
+                }
                 $cleanOptions[$value] = $text;
             }
             $options = $cleanOptions;
