@@ -501,12 +501,18 @@ class Form
     }
 
     /**
-     * Return error for the field name of null if no errors were registered for the field.
+     * Returns error for the field name of null if no errors were registered for the field.
+     * If optional $newMessage is provided, sets the message as the field error and returns the form itself
      * @param $field
+     * @param null $newMessage
      * @return null
      */
-    public function error($field)
+    public function error($field, $newMessage = null)
     {
-        return isset($this->errors[$field]) ? $this->errors[$field] : null;
+        if ($newMessage === null) {
+            return isset($this->errors[$field]) ? $this->errors[$field] : null;
+        }
+        $this->errors[$field] = $newMessage;
+        return $this;
     }
 }
