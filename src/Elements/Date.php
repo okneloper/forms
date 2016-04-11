@@ -10,6 +10,8 @@ class Date extends Text
 
     protected $format = 'Y-m-d';
 
+    protected $inputFormat = 'Y-m-d';
+
     /**
      * @return string
      */
@@ -21,10 +23,31 @@ class Date extends Text
     /**
      * @param string $format
      */
-    public function setFormat($format)
+    public function setFormat($format, $inputFormat = null)
     {
         $this->format = $format;
+        if ($inputFormat !== null) {
+            $this->inputFormat = $inputFormat;
+        }
     }
+
+    /**
+     * @return string
+     */
+    public function getInputFormat()
+    {
+        return $this->inputFormat;
+    }
+
+    /**
+     * @param string $inputFormat
+     */
+    public function setInputFormat($inputFormat)
+    {
+        $this->inputFormat = $inputFormat;
+    }
+
+
 
     protected function buildAttr($name, $value)
     {
@@ -34,11 +57,18 @@ class Date extends Text
         return parent::buildAttr($name, $value);
     }
 
-
-    public function render__()
+    public function val($value = null)
     {
-        $attrs = $this->getAttributes() + ['type' => $this->type];
+        if (is_string($value) && $value) {
+            // if value is astring and is parseable into a DateTime, then set this Datetime as Value
+            $dt = \DateTime::createFromFormat($this->inputFormat, $value);
+            if ($dt) {
+                $value = $dt;
+            }
+        }
 
-        return '<input ' . $this->buildAttrs($attrs) . '>';
+        return parent::val($value);
     }
+
+
 }

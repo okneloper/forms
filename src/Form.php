@@ -6,6 +6,7 @@
  */
 namespace Okneloper\Forms;
 
+use Okneloper\Forms\Elements\Date;
 use Okneloper\Forms\Validator;
 use Okneloper\Forms\Filters\ArrayFilter;
 use Okneloper\Forms\Filters\FilterInterface;
@@ -495,6 +496,9 @@ class Form
         $array = [];
         foreach ($this->elements as $el) {
             $array[$el->name] = $model->{$el->name};
+            if ($array[$el->name] instanceof \DateTime && $el instanceof Date) {
+                $array[$el->name] = $array[$el->name]->format($el->getInputFormat());
+            }
         }
 
         return $array;
