@@ -69,7 +69,7 @@ class Element
     {
         // name is set to a public property for convenient use in twig templates (magic methods
         // don't as one would expect
-        return $this->attributes + ['name' => $this->nameAttribute];
+        return ['name' => $this->nameAttribute] + $this->attributes;
     }
 
     public function __construct($name, $label = null, $attributes = [])
@@ -172,7 +172,7 @@ class Element
 
     public function render()
     {
-        return '<input ' . $this->buildAttrs($this->getAttributes() + ['type' => $this->type]) . '>';
+        return '<input ' . $this->buildAttrs(['type' => $this->type] + $this->getAttributes()) . '>';
     }
 
 
