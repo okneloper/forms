@@ -258,7 +258,7 @@ class Element
 
     public function data($key, $value)
     {
-        $this->attr("data-$key", $this->anythingToString($value));
+        return $this->attr("data-$key", $this->anythingToString($value));
     }
 
     /**
