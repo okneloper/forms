@@ -86,7 +86,7 @@ class Select extends Choice
     public function assertMultipleValueIsArray($value)
     {
         if ($this->multiple() && !is_array($value)) {
-            throw new NotArrayException($value);
+            throw new NotArrayException($value, 'Select multiple');
         }
     }
 
