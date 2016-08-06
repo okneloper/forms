@@ -32,7 +32,7 @@ class NativeFilter implements FilterInterface
         if (is_object($value)) { return $value; }
 
         $value = filter_var($value, $this->filter, $this->options);
-        if ($this->options['trim']) {
+        if ($this->options['trim'] && is_string($value)) {
             $value = trim($value);
         }
         return $value;

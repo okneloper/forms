@@ -357,17 +357,22 @@ class Form
     {
         $filters = $this->bootFilters();
 
-        foreach ($data as $k => &$v) {
-            if (isset($filters[$k])) {
-                $filter = $filters[$k];
+        foreach ($this->elements as $el) {
+            /* @var $el Element */
+
+            $name = $el->name;
+            $value = isset($data[$name]) ? $data[$name] : null;
+
+            if (isset($filters[$name])) {
+                $filter = $filters[$name];
             } else {
                 $filter = new NativeFilter(FILTER_SANITIZE_STRING);
-                if (is_array($v)) {
+                if (is_array($value)) {
                     $filter = new ArrayFilter($filter);
                 }
             }
 
-            $v = $this->applyFilter($filter, $k, $v);
+            $data[$name] = $this->applyFilter($filter, $name, $value);
         }
 
         return $data;
