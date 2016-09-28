@@ -7,7 +7,7 @@ namespace Okneloper\Forms\Elements;
  * @package Okneloper\Forms\Elements
  * @author Aleksey Lavrinenko
  */
-class Datetext extends Date
+class DateAsText extends Date
 {
     protected $type = 'text';
 
@@ -46,13 +46,5 @@ class Datetext extends Date
             }
         }
         return parent::buildAttr($name, $value);
-    }
-
-
-    public function render__()
-    {
-        $attrs = $this->getAttributes() + ['type' => $this->type];
-
-        return '<input ' . $this->buildAttrs($attrs) . '>';
     }
 }
