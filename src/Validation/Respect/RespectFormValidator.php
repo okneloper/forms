@@ -1,11 +1,6 @@
 <?php
-/**
- * @author Aleksey Lavrinenko
- * @version 28.12.2015.
- */
 
 namespace Okneloper\Forms\Validation\Respect;
-
 
 use Okneloper\Forms\Form;
 

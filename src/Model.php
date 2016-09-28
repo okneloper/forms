@@ -2,6 +2,12 @@
 
 namespace Okneloper\Forms;
 
+/**
+ * Class Model.
+ * Array model wrapper for use model as object.
+ *
+ * @package Okneloper\Forms
+ */
 class Model extends \ArrayObject
 {
     public function __get($prop)
