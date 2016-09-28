@@ -12,7 +12,8 @@ class VoidFilterTest extends PHPUnit_Framework_TestCase
     public function testDoesntFilter()
     {
         $filter = new VoidFilter();
-        $this->assertEquals('<script>script goes here</script>', $filter->filter('test', '<script>script goes here</script>'));
+        $input = '<script>script goes here</script> ';
+        $this->assertEquals($input, $filter->filter('test', $input));
 
         $specialValues = [
             null, '', 0, 'test',

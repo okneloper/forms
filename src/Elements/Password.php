@@ -1,11 +1,15 @@
 <?php
-/**
- * @author Aleksey Lavrinenko
- * @version 16.02.2016.
- */
+
 namespace Okneloper\Forms\Elements;
+
+use Okneloper\Forms\Filters\VoidFilter;
 
 class Password extends Text
 {
     protected $type = 'password';
+
+    public function getDefaultFilters()
+    {
+        return new VoidFilter();
+    }
 }

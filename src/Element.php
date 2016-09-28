@@ -1,6 +1,7 @@
 <?php
 
 namespace Okneloper\Forms;
+use Okneloper\Forms\Filters\NativeFilter;
 use Okneloper\Forms\Observers\AttributeObserver;
 use Okneloper\Forms\Observers\ValueObserver;
 
@@ -21,12 +22,12 @@ class Element
 {
     static protected $defaultAttributes = [];
 
-    static public function setDefaultAttrib($name, $value)
+    public static function setDefaultAttrib($name, $value)
     {
         static::$defaultAttributes[$name] = $value;
     }
 
-    static public function factory($type, $name, $label = null, $attributes = [])
+    public static function factory($type, $name, $label = null, $attributes = [])
     {
         $class = __NAMESPACE__ . '\\Elements\\' . ucfirst($type);
         return new $class($name, $label, $attributes);
@@ -318,5 +319,10 @@ class Element
         $this->nameAttribute = $name;
         $name = $this->cleanName($name);
         $this->name = $name;
+    }
+
+    public function getDefaultFilters()
+    {
+        return [new NativeFilter(FILTER_SANITIZE_STRING)];
     }
 }

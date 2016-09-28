@@ -367,7 +367,7 @@ class Form
             if (isset($filters[$name])) {
                 $filter = $filters[$name];
             } else {
-                $filter = new NativeFilter(FILTER_SANITIZE_STRING);
+                $filter = $el->getDefaultFilters();
                 if (is_array($value)) {
                     $filter = new ArrayFilter($filter);
                 }

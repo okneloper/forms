@@ -20,6 +20,16 @@ class FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('script goes here', $form->val('test'));
     }
 
+    public function testTrimsStringByDefault()
+    {
+        $form = new \Okneloper\Forms\Form();
+        $form->add('text', 'test');
+        $form->submit([
+            'test' => 'text with a space at the end ',
+        ]);
+        $this->assertEquals('text with a space at the end', $form->val('test'));
+    }
+
     public function testAppliesArrayOdFilters()
     {
         $filter1 = new NativeFilter(FILTER_SANITIZE_STRING);
