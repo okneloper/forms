@@ -7,6 +7,7 @@
 namespace Okneloper\Forms;
 
 use Okneloper\Forms\Elements\Date;
+use Okneloper\Forms\Observers\Observer;
 use Okneloper\Forms\Validator;
 use Okneloper\Forms\Filters\ArrayFilter;
 use Okneloper\Forms\Filters\FilterInterface;
@@ -224,7 +225,7 @@ class Form
         }
 
         // add observer of "Value changed" event
-        $element->observe($this->observer);
+        $element->subscribe($this->observer);
     }
 
     /**
@@ -471,7 +472,7 @@ class Form
             'email'    => '{value} is not a valid email address',
         ];
 
-        // merge all the message that were added overriding default messages if overriding messages provided
+        // merge all the messages that were added overriding default messages if overriding messages provided
         foreach ($this::$moreErrorMessages as $moreMessages) {
             if ($moreMessages instanceof \Closure) {
                 $moreMessages = $moreMessages();

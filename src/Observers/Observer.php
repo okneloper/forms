@@ -1,8 +1,11 @@
 <?php
 
-namespace Okneloper\Forms;
+namespace Okneloper\Forms\Observers;
 
-class Observer
+use Okneloper\Forms\Element;
+use Okneloper\Forms\Form;
+
+class Observer implements ValueObserver
 {
     /**
      * @var Form
@@ -14,7 +17,7 @@ class Observer
         $this->form = $form;
     }
 
-    public function valueChanged(Element $element, $params)
+    public function valueChanged(Element $element, $oldValue)
     {
         // do nothing until the model is assigned (bound)
         if (!$this->form->modelAssigned()) {

@@ -1,6 +1,8 @@
 <?php
 
 namespace Okneloper\Forms;
+use Okneloper\Forms\Observers\AttributeObserver;
+use Okneloper\Forms\Observers\ValueObserver;
 
 /**
  * Class Element
@@ -46,6 +48,8 @@ class Element
 
     public $label;
 
+    protected $value;
+
     public function __get($prop)
     {
         if (isset($this->$prop)) {
@@ -74,9 +78,7 @@ class Element
 
     public function __construct($name, $label = null, $attributes = [])
     {
-        $this->nameAttribute = $name;
-        $name = $this->cleanName($name);
-        $this->attr('name', $name);
+        $this->setName($name);
 
         if (!isset($attributes['id'])) {
             $attributes['id'] = $name;
@@ -99,58 +101,18 @@ class Element
     public function attr($name, $value = null)
     {
         if ($value === null) {
-            switch ($name) {
-                case 'type':
-                    return $this->$name;
-                    break;
-
-                case 'name':
-                    return $this->nameAttribute;
-                    break;
-            }
-            return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+            return $this->getAttribute($name);
         }
 
-        switch ($name) {
-            case 'label':
-                $this->label = $value;
-                break;
-
-            case 'name':
-                // prepare parameter for a 'change' event
-                $eventParams = ['oldValue' => $this->name];
-
-                $this->name = $value;
-                break;
-
-            default:
-                // prepare parameter for a 'change' event
-                $eventParams = [
-                    'oldValue' => isset($this->attributes[$name]) ? $this->attributes[$name] : null,
-                ];
-
-                // for boolean attributes, as per HTML5 spec, we just unset the attribute if false is passed as value
-                if ($value === false) {
-                    unset($this->attributes[$name]);
-                } else {
-                    // otherwise set the new value
-                    $this->attributes[$name] = $value;
-                }
-                break;
+        if ($name === 'name') {
+            return $this->setName($value);
         }
 
-        // trigger event if there are event params to pass
-        if (isset($eventParams)) {
-            // trigger the event
-            if ($name === 'value') {
-                $this->trigger('valueChanged', $eventParams);
-            } else {
-                $this->trigger('attrChanged', $eventParams + ['attr' => $name]);
-            }
-        }
+        $this->setAttribute($name, $value);
 
         return $this;
     }
+
 
     /**
      * @param $className
@@ -172,7 +134,9 @@ class Element
 
     public function render()
     {
-        return '<input ' . $this->buildAttrs(['type' => $this->type] + $this->getAttributes()) . '>';
+        $attributes = ['type' => $this->type] + $this->getAttributes();
+        $attributes = array_merge($attributes, ['value' => $this->value]);
+        return '<input ' . $this->buildAttrs($attributes) . '>';
     }
 
 
@@ -217,12 +181,35 @@ class Element
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
 
+    /**
+     * jQuery-like value getter/setter
+     *
+     * @param null $value
+     * @return mixed|$this current value or $this
+     */
     public function val($value = null)
     {
         if ($value === null) {
-            return $this->attr('value');
+            return $this->value;
         }
-        $this->attr('value', $value);
+
+        $oldValue = $this->value;
+
+        $this->value = $value;
+
+        $this->triggerValueChanged($oldValue);
+
+        return $this;
+    }
+
+    /**
+     * Sets element value
+     * @param $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->val($value);
         return $this;
     }
 
@@ -231,16 +218,25 @@ class Element
         return $this->render();
     }
 
-    public function observe($observer)
+    public function subscribe($observer)
     {
         $this->observers[] = $observer;
     }
 
-    public function trigger($eventType, $params = [])
+    protected function triggerValueChanged($oldValue)
     {
         foreach ($this->observers as $observer) {
-            if (method_exists($observer, $eventType)) {
-                $observer->$eventType($this, $params);
+            if ($observer instanceof ValueObserver) {
+                $observer->valueChanged($this, $oldValue);
+            }
+        }
+    }
+
+    protected function triggerAttributeChanged($name, $oldValue)
+    {
+        foreach ($this->observers as $observer) {
+            if ($observer instanceof AttributeObserver) {
+                $observer->attributeChanged($this, $name, $oldValue);
             }
         }
     }
@@ -282,5 +278,45 @@ class Element
             return $this->escape($anything);
         }
         return $anything;
+    }
+
+    /**
+     * @param $name
+     * @return string|null
+     */
+    protected function getAttribute($name)
+    {
+        switch ($name) {
+            case 'type':
+                return $this->$name;
+                break;
+
+            case 'name':
+                return $this->nameAttribute;
+                break;
+        }
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    }
+
+    protected function setAttribute($name, $value)
+    {
+        $oldValue = $this->getAttribute($name);
+
+        // for boolean attributes, as per HTML5 spec, we just unset the attribute if false is passed as value
+        if ($value === false) {
+            unset($this->attributes[$name]);
+        } else {
+            // otherwise set the new value
+            $this->attributes[$name] = $value;
+        }
+
+        $this->triggerAttributeChanged($name, $oldValue);
+    }
+
+    public function setName($name)
+    {
+        $this->nameAttribute = $name;
+        $name = $this->cleanName($name);
+        $this->name = $name;
     }
 }

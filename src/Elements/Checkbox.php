@@ -42,7 +42,6 @@ class Checkbox extends Element
     public function attr($name, $value = null)
     {
         if ($name == 'checked' && $value !== null) {
-
             $this->attributes[$name] = $value;
             $this->trigger('valueChanged', [
                 'oldValue' => isset($this->attributes[$name]) ? $this->attributes[$name] : null,

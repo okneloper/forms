@@ -16,7 +16,7 @@ class Textarea extends Element
             unset($attrs['value']);
         }
         return '<textarea ' . $this->buildAttrs($attrs) . '>'
-            . $this->escape($this->attr('value'))
+            . $this->escape($this->val())
             . '</textarea>';
     }
 }
