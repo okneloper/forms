@@ -38,3 +38,42 @@ if ($request->isPost()) {
     }
 }
 ```
+
+## Elements
+
+### Buttons
+```php
+$form->add('button', 'btn', 'ClickMe'); // <buttont type="button"...>ClickMe</button>
+$form->add('submitButton', 'btn', 'Submit'); // <buttont type="submit">Submit</button>
+```
+Button values are ignored when submitting request data to the form.
+```php
+<?php
+
+
+$form = new \Okneloper\Forms\Form();
+
+$form->add('text', 'fname');
+$form->add('text', 'lname');
+$form->add('submitButton', 'Submit');
+
+// this is how data might come from a submitted form
+$data = [
+    'fname' => 'John',
+    'lname' => 'Smith',
+    'Submit' => '1',
+];
+
+$form->submit($data);
+
+print_r($form->modelToArray());
+
+?>
+
+Array
+(
+    [fname] => John
+    [lname] => Smith
+)
+
+```
