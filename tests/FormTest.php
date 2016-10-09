@@ -51,4 +51,25 @@ class FormTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($filtered, $form->val('test'));
     }
+
+    public function testIgnoreButtonWhenSubmittingData()
+    {
+        $form = new \Okneloper\Forms\Form();
+
+        $form->add('text', 'fname');
+        $form->add('text', 'lname');
+        $form->add('submitButton', 'Submit');
+
+        $expectedData = [
+            'fname' => 'John',
+            'lname' => 'Smith',
+        ];
+
+        $data = $expectedData + [
+            'Submit' => '1',
+        ];
+        $form->submit($data);
+
+        $this->assertEquals($expectedData, $form->modelToArray());
+    }
 }

@@ -6,6 +6,7 @@
  */
 namespace Okneloper\Forms;
 
+use Okneloper\Forms\Elements\Button;
 use Okneloper\Forms\Elements\Date;
 use Okneloper\Forms\Observers\Observer;
 use Okneloper\Forms\Validator;
@@ -331,6 +332,11 @@ class Form
                 continue;
             }
 
+            // buttons don't provide any values, so skip those as well
+            if ($el instanceof Button) {
+                continue;
+            }
+
             $value = isset($data[$el->name]) ? $data[$el->name] : '';
             $el->val($value);
             /*
@@ -501,6 +507,11 @@ class Form
 
         $array = [];
         foreach ($this->elements as $el) {
+            // ignore buttons as their values don't represent actual data
+            if ($el instanceof Button) {
+                continue;
+            }
+
             $array[$el->name] = $model->{$el->name};
             if ($array[$el->name] instanceof \DateTime && $el instanceof Date) {
                 $array[$el->name] = $array[$el->name]->format($el->getInputFormat());
