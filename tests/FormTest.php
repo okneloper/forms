@@ -72,4 +72,12 @@ class FormTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedData, $form->modelToArray());
     }
+
+    public function testSetsAction()
+    {
+        $form = new \Okneloper\Forms\Form();
+        $expected = '/my/action';
+        $form->setAction($expected);
+        $this->assertEquals($expected, $form->getAction());
+    }
 }

@@ -46,6 +46,12 @@ class Form
     }
 
     /**
+     * Form action attribute
+     * @var string
+     */
+    protected $action = '';
+
+    /**
      * Form elements
      * @var array
      */
@@ -93,6 +99,24 @@ class Form
      * @var array<FilterInterface>
      */
     protected $filters = [];
+
+    /**
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param string $action
+     * @return Form
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+        return $this;
+    }
 
     /**
      * Get resolved validator
