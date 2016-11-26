@@ -322,7 +322,7 @@ class Element
         $this->name = $name;
     }
 
-    public function getDefaultFilters()
+    public function getDefaultFilter()
     {
         // this is the most commonly used filter, so apply it by default
         return [new StringSanitizeFilter()];

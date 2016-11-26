@@ -8,7 +8,7 @@ class Password extends Text
 {
     protected $type = 'password';
 
-    public function getDefaultFilters()
+    public function getDefaultFilter()
     {
         return new VoidFilter();
     }

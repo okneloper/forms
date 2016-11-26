@@ -395,7 +395,7 @@ class Form
             if (isset($filters[$name])) {
                 $filter = $filters[$name];
             } else {
-                $filter = $el->getDefaultFilters();
+                $filter = $el->getDefaultFilter();
                 if (is_array($value)) {
                     $filter = new ArrayFilter($filter);
                 }
