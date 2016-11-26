@@ -21,6 +21,17 @@ class FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('script goes here x', $form->val('test'));
     }
 
+    public function testDoesNotEncodeCharacters()
+    {
+        $form = new \Okneloper\Forms\Form();
+        $form->add('text', 'test');
+        $form->submit([
+            'test' => ' script \'goes\' here => "x" ',
+        ]);
+        // we expect the default filter to remove tags and trim the input string
+        $this->assertEquals('script \'goes\' here => "x"', $form->val('test'));
+    }
+
     public function testAppliesArrayOdFilters()
     {
         $filter1 = new NativeFilter(FILTER_SANITIZE_STRING);
