@@ -6,6 +6,8 @@
  */
 namespace Okneloper\Forms;
 
+use Okneloper\Forms\Elements\Button;
+use Okneloper\Forms\Filters\SkipFilter;
 use Okneloper\Forms\Observers\Observer;
 use Okneloper\Forms\Validator;
 use Okneloper\Forms\Filters\ArrayFilter;
@@ -51,7 +53,7 @@ class Form
 
     /**
      * Form elements
-     * @var array
+     * @var Element[]
      */
     protected $elements = [];
 
@@ -387,8 +389,6 @@ class Form
         $filters = $this->bootFilters();
 
         foreach ($this->elements as $el) {
-            /* @var $el Element */
-
             $name = $el->name;
             $value = isset($data[$name]) ? $data[$name] : null;
 
@@ -396,6 +396,18 @@ class Form
                 $filter = $filters[$name];
             } else {
                 $filter = $el->getDefaultFilter();
+
+                // do not include this value in the filtered data at all
+                if ($filter instanceof SkipFilter) {
+                    // remove the data to skip from the final array
+                    if (isset($data[$el->name])) {
+                        unset($data[$el->name]);
+                    }
+
+                    // SkipFilter should not be run either
+                    continue;
+                }
+
                 if (is_array($value)) {
                     $filter = new ArrayFilter($filter);
                 }

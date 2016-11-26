@@ -3,6 +3,7 @@
 namespace Okneloper\Forms\Elements;
 
 use Okneloper\Forms\Element;
+use Okneloper\Forms\Filters\SkipFilter;
 
 class Button extends Element
 {
@@ -16,5 +17,10 @@ class Button extends Element
             $attributes += ['value' => $this->value];
         }
         return '<button ' . $this->buildAttrs($attributes) . '>' . $this->escape($this->label) . '</button>';
+    }
+
+    public function getDefaultFilter()
+    {
+        return new SkipFilter();
     }
 }
