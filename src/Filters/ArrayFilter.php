@@ -1,10 +1,13 @@
 <?php
-/**
- * @author Aleksey Lavrinenko
- * @version 29.10.2015.
- */
+
 namespace Okneloper\Forms\Filters;
 
+/**
+ * Class ArrayFilter.
+ * Applies the filter to all elements of an array recursively
+ *
+ * @package Okneloper\Forms\Filters
+ */
 class ArrayFilter implements FilterInterface
 {
     /**

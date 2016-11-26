@@ -6,8 +6,6 @@
  */
 namespace Okneloper\Forms;
 
-use Okneloper\Forms\Elements\Button;
-use Okneloper\Forms\Elements\Date;
 use Okneloper\Forms\Observers\Observer;
 use Okneloper\Forms\Validator;
 use Okneloper\Forms\Filters\ArrayFilter;
@@ -496,7 +494,7 @@ class Form
             'accepted' => 'Please accept the terms',
             'in'       => 'Please chose one of the options for {:attribute}',
             'numeric'  => '{:attribute} should be a decimal number',
-            'min'      => 'Minimum {:attribute} is :min',
+            'min'      => 'Minimum {:attribute} length is :min',
             'date_format' => '{:attribute} is not in the required date format',
             'date'     => '\'{value}\' could not be transformed to a date',
             'email'    => '{value} is not a valid email address',

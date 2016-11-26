@@ -2,6 +2,7 @@
 
 namespace Okneloper\Forms;
 use Okneloper\Forms\Filters\NativeFilter;
+use Okneloper\Forms\Filters\StringSanitizeFilter;
 use Okneloper\Forms\Observers\AttributeObserver;
 use Okneloper\Forms\Observers\ValueObserver;
 
@@ -323,6 +324,7 @@ class Element
 
     public function getDefaultFilters()
     {
-        return [new NativeFilter(FILTER_SANITIZE_STRING)];
+        // this is the most commonly used filter, so apply it by default
+        return [new StringSanitizeFilter()];
     }
 }
