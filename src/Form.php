@@ -7,6 +7,7 @@
 namespace Okneloper\Forms;
 
 use Okneloper\Forms\Elements\Date;
+use Okneloper\Forms\Filters\StringSanitizeFilter;
 use Okneloper\Forms\Validator;
 use Okneloper\Forms\Filters\ArrayFilter;
 use Okneloper\Forms\Filters\FilterInterface;
@@ -366,7 +367,8 @@ class Form
             if (isset($filters[$name])) {
                 $filter = $filters[$name];
             } else {
-                $filter = new NativeFilter(FILTER_SANITIZE_STRING);
+                // this is the most commonly used filter, so is applied by default
+                $filter = new StringSanitizeFilter();
                 if (is_array($value)) {
                     $filter = new ArrayFilter($filter);
                 }

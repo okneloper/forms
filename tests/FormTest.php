@@ -15,9 +15,10 @@ class FormTest extends PHPUnit_Framework_TestCase
         $form = new \Okneloper\Forms\Form();
         $form->add('text', 'test');
         $form->submit([
-            'test' => '<script>script goes here</script>',
+            'test' => ' <script>script goes here</script> x ',
         ]);
-        $this->assertEquals('script goes here', $form->val('test'));
+        // we expect the default filter to remove tags and trim the input string
+        $this->assertEquals('script goes here x', $form->val('test'));
     }
 
     public function testAppliesArrayOdFilters()
