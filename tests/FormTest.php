@@ -31,7 +31,7 @@ class FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('text with a space at the end', $form->val('test'));
     }
 
-    public function testAppliesArrayOdFilters()
+    public function testAppliesArrayOfFilters()
     {
         $filter1 = new NativeFilter(FILTER_SANITIZE_STRING);
         $filter2 = new NativeFilter(FILTER_SANITIZE_NUMBER_INT);
@@ -53,7 +53,7 @@ class FormTest extends PHPUnit_Framework_TestCase
         $this->assertSame($filtered, $form->val('test'));
     }
 
-    public function testIgnoreButtonWhenSubmittingData()
+    public function testIgnoresButtonWhenSubmittingData()
     {
         $form = new \Okneloper\Forms\Form();
 
@@ -80,5 +80,28 @@ class FormTest extends PHPUnit_Framework_TestCase
         $expected = '/my/action';
         $form->setAction($expected);
         $this->assertEquals($expected, $form->getAction());
+    }
+
+    /**
+     * Test that after being submitted, the data does not contain any params that are nod defined in the form as
+     * elements
+     */
+    public function testIgnoresRedundantData()
+    {
+        $form = new \Okneloper\Forms\Form();
+
+        $form->add('text', 'test1');
+
+        $clean = [
+            'test1' => 'Some test data',
+        ];
+
+        $data = $clean + [
+            'test2' => 'Some more data',
+        ];
+
+        $form->submit($data);
+
+        $this->assertEquals($clean, $form->modelToArray());
     }
 }
