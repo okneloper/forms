@@ -17,4 +17,12 @@ class PasswordTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertEquals($passwordString, $form->val('test'));
     }
+
+    public function testItDoesNotRenderValue()
+    {
+        $password = new \Okneloper\Forms\Elements\Password('password');
+        $password->val('password');
+
+        $this->assertNotContains('value="password"', $password->render());
+    }
 }

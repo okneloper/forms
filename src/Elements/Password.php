@@ -12,4 +12,17 @@ class Password extends Text
     {
         return new VoidFilter();
     }
+
+    /**
+     * Prevent `value` attribute of password input from rendering
+     * @param $attrs
+     * @return string
+     */
+    protected function buildAttrs($attrs)
+    {
+        if (isset($attrs['value'])) {
+            unset($attrs['value']);
+        }
+        return parent::buildAttrs($attrs);
+    }
 }
