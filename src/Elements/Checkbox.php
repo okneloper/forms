@@ -3,6 +3,7 @@
 namespace Okneloper\Forms\Elements;
 
 use Okneloper\Forms\Element;
+use Okneloper\Forms\Filters\VoidFilter;
 
 class Checkbox extends Element
 {
@@ -25,15 +26,12 @@ class Checkbox extends Element
     public function val($value = null)
     {
         if ($value !== null) {
-
-            $eventParams = [
-                'oldValue' => $this->attr('checked'),
-            ];
+            $oldValue = $this->attr('checked');
 
             // @todo should it be === ?
             $this->attr('checked', $this->attr('value') == $value);
 
-            $this->trigger('valueChanged', $eventParams);
+            $this->triggerValueChanged($oldValue);
 
             return $this;
         }
@@ -45,11 +43,10 @@ class Checkbox extends Element
     public function attr($name, $value = null)
     {
         if ($name == 'checked' && $value !== null) {
+            $oldValue = $this->attr('checked');
             $this->attributes[$name] = $value;
-            $this->trigger('valueChanged', [
-                'oldValue' => isset($this->attributes[$name]) ? $this->attributes[$name] : null,
-            ]);
-
+            // both val() and attr('checked', X) trigger a 'valueChanged' event
+            $this->triggerValueChanged($oldValue);
             return $this;
         } else {
             return parent::attr($name, $value);
@@ -63,4 +60,8 @@ class Checkbox extends Element
     }
     */
 
+    public function getDefaultFilter()
+    {
+        return new VoidFilter();
+    }
 }

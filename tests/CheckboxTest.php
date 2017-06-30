@@ -23,7 +23,9 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $checkbox->val('something');
         $this->assertNotFalse(strpos($checkbox->render(), 'value="1"'), 'Checkbox value has changed');
         $this->assertFalse($checkbox->attr('checked'));
-        $checkbox->val(1);
+        $this->assertNull($checkbox->val());
+        $checkbox->val('1');
         $this->assertTrue($checkbox->attr('checked'));
+        $this->assertSame(1, $checkbox->val());
     }
 }
