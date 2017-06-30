@@ -252,12 +252,6 @@ class Element
         return preg_replace('#^([^\[]+)\[.+$#', '$1', $name);
     }
 
-    public function __call($func, $args)
-    {
-        $value = isset($args[0]) ? $args[0] : null;
-        return $this->attr($func, $value);
-    }
-
     public function data($key, $value)
     {
         return $this->attr("data-$key", $this->anythingToString($value));
