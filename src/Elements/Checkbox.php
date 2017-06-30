@@ -6,9 +6,12 @@ use Okneloper\Forms\Element;
 
 class Checkbox extends Element
 {
-    static protected $defaultAttributes = ['value' => 1];
-
     protected $type = 'checkbox';
+
+    /**
+     * Set default value attribute as '1' for Checkbox
+     */
+    protected $value = 1;
 
     public function checkedIf($condition)
     {

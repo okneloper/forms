@@ -110,6 +110,10 @@ class Element
             return $this->setName($value);
         }
 
+        if ($name === 'value') {
+            return $this->val($value);
+        }
+
         $this->setAttribute($name, $value);
 
         return $this;
@@ -295,6 +299,10 @@ class Element
 
             case 'name':
                 return $this->nameAttribute;
+                break;
+
+            case 'value':
+                return $this->value;
                 break;
         }
         return isset($this->attributes[$name]) ? $this->attributes[$name] : null;

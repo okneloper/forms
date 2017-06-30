@@ -25,6 +25,18 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertSame(true, $el->attr('disabled'));
     }
 
+    public function testSetsValueViaAttr()
+    {
+        $el = new \Okneloper\Forms\Element('test');
+        $el->val('34');
+        $this->assertEquals('34', $el->val());
+        $this->assertEquals('34', $el->attr('value'));
+
+        $el->attr('value', '55');
+        $this->assertEquals('55', $el->val());
+        $this->assertEquals('55', $el->attr('value'));
+    }
+
     public function namesProvider()
     {
         return [
