@@ -10,7 +10,7 @@ class Title extends Select
     {
         $options = [];
         if (isset($emptyOption)) {
-            $options[''] = $emptyOption;
+            $this->emptyOption($emptyOption);
         }
         foreach (['Miss', 'Mrs', 'Ms', 'Mr', 'Dr'] as $title) {
             $options[$title] = $title;
