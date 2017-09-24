@@ -10,8 +10,8 @@ class ArrayAssocTest extends TestCase
 
         $el = $form->add('arrayAssoc', 'array');
 
-        $this->assertInstanceOf('Okneloper\Forms\ElementInterface', $el);
-        $this->assertInstanceOf('Okneloper\Forms\Elements\ArrayAssoc', $el);
+        $this->assertInstanceOf(\Okneloper\Forms\ElementInterface::class, $el);
+        $this->assertInstanceOf(ArrayAssoc::class, $el);
     }
 
     public function testItSetsElementsNameToArraySyntax()
