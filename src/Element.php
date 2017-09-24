@@ -15,13 +15,20 @@ use Okneloper\Forms\Observers\ValueObserver;
  * @property $id
  * @property $type
  *
- * @method placeholder($value)
+ * @method disabled($value = null)
+ * @method placeholder($value = null)
  *
  * @package Okneloper\Forms
  */
 class Element
 {
     static protected $defaultAttributes = [];
+
+    static protected $knownAttributes = [
+        'disabled',
+        'placeholder',
+        'readonly',
+    ];
 
     public static function setDefaultAttrib($name, $value)
     {
@@ -257,15 +264,6 @@ class Element
         return $this->attr("data-$key", $this->anythingToString($value));
     }
 
-    /**
-     * Get 'disabled' state of the element
-     * @return Element
-     */
-    public function disabled($value = null)
-    {
-        return $this->attr('disabled');
-    }
-
     public function disable()
     {
         return $this->attr('disabled', true);
@@ -328,5 +326,18 @@ class Element
     {
         // this is the most commonly used filter, so apply it by default
         return [new StringSanitizeFilter()];
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (in_array($name, static::$knownAttributes)) {
+            if (!$arguments) {
+                return $this->attr($name);
+            } else {
+                return $this->attr($name, $arguments[0]);
+            }
+        }
+
+        throw new \BadMethodCallException("$name function not defined on " . get_class($this));
     }
 }

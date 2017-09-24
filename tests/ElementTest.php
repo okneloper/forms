@@ -46,4 +46,32 @@ class ElementTest extends PHPUnit_Framework_TestCase
             ['quantity[1][]', 'quantity'],
         ];
     }
+
+    /**
+     * Confirm for backwards compatibility
+     */
+    public function testHasPlaceholderFunction()
+    {
+        $el = new \Okneloper\Forms\Element('test');
+
+        $el->placeholder();
+    }
+
+    /**
+     * Confirm for backwards compatibility
+     */
+    public function testHasDisabledFunction()
+    {
+        $el = new \Okneloper\Forms\Element('test');
+
+        $this->assertNull($el->attr('disabled'));
+
+        $this->assertNull($el->disabled());
+        // confirm nothing changed
+        $this->assertNull($el->attr('disabled'));
+
+        $el->disabled(true);
+        $this->assertTrue($el->disabled());
+        $this->assertTrue($el->attr('disabled'));
+    }
 }
