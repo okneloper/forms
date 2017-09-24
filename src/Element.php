@@ -20,7 +20,7 @@ use Okneloper\Forms\Observers\ValueObserver;
  *
  * @package Okneloper\Forms
  */
-class Element
+class Element implements ElementInterface
 {
     static protected $defaultAttributes = [];
 
@@ -50,7 +50,8 @@ class Element
     public $name;
 
     /**
-     * Fill name attribute including []
+     * Full name attribute including []
+     *
      * @var string
      */
     public $nameAttribute;

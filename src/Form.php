@@ -25,7 +25,7 @@ use Okneloper\Forms\Validation\ValidatorInterface;
 class Form
 {
     /**
-     * @var \Closure
+     * @var string[]
      */
     protected static $moreErrorMessages = [];
 
@@ -200,6 +200,21 @@ class Form
     }
 
     /**
+     * Factory method.
+     * Creates a new element of specified type.
+     *
+     * @param $type
+     * @param $name
+     * @param $label
+     * @param $attribs
+     * @return ElementInterface
+     */
+    public function makeElement($type, $name, $label = null, $attributes = [])
+    {
+        return Element::factory($type, $name, $label, $attributes);
+    }
+
+    /**
      * Override this method to initialize elements when extending the form
      */
     public function initElements()
@@ -222,14 +237,14 @@ class Form
      */
     public function add($type, $name = null, $label = null, $attribs = [])
     {
-        if ($type instanceof Element) {
+        if ($type instanceof ElementInterface) {
             $this->addElement($type);
             return $type;
         } else {
             if (!$name) {
                 throw new \Exception("Name not specified");
             }
-            $el = Element::factory($type, $name, $label, $attribs);
+            $el = $this->makeElement($type, $name, $label, $attribs);
             $this->addElement($el);
             return $el;
         }
@@ -239,7 +254,7 @@ class Form
      * Add an instance of Element to the form.
      * @param Element $element
      */
-    public function addElement(Element $element)
+    public function addElement(ElementInterface $element)
     {
         // store element
         $this->elements[$element->name] = $element;
