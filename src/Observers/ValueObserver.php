@@ -2,9 +2,9 @@
 
 namespace Okneloper\Forms\Observers;
 
-use Okneloper\Forms\Element;
+use Okneloper\Forms\ElementInterface;
 
 interface ValueObserver
 {
-    public function valueChanged(Element $element, $oldValue);
+    public function valueChanged(ElementInterface $element, $oldValue);
 }

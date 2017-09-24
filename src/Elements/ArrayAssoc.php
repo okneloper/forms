@@ -39,12 +39,12 @@ class ArrayAssoc implements ElementInterface
     public function addElement(ElementInterface $element)
     {
         $elName = $element->name;
-        $element->attr('name', "{$this->name}[{$elName}]");
+        $element->nameAttribute = "{$this->name}[{$elName}]";
 
         $this->elements[$elName] = $element;
 
         foreach ($this->observers as $observer) {
-            $element->subscribe($observer);
+            #$element->subscribe($observer);
         }
     }
 
@@ -56,11 +56,23 @@ class ArrayAssoc implements ElementInterface
      */
     public function val($value = null)
     {
-        $model = new Model();
-        foreach ($this->elements as $element) {
-            $model->{$element->name} = $element->val();
+        if ($value === null) {
+            $model = new Model();
+            foreach ($this->elements as $element) {
+                $model->{$element->name} = $element->val();
+            }
+            return $model->toArray();
         }
-        return $model->toArray();
+
+        $oldValue = $this->val();
+
+        foreach ((array)$value as $key => $val) {
+            if (isset($this->elements[$key])) {
+                $this->elements[$key]->val($val);
+            }
+        }
+
+        $this->triggerValueChanged($oldValue);
     }
 
     /**

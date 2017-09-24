@@ -22,8 +22,8 @@ class ArrayAssocTest extends TestCase
 
         $array->addElement($text);
 
-        // name remains `test`
-        $this->assertEquals('test', $text->name);
+        // name remains `name`
+        $this->assertEquals('name', $text->name);
         // but the actual attribute is set to the array syntax
         $this->assertEquals('test[name]', $text->nameAttribute);
     }
@@ -56,5 +56,12 @@ class ArrayAssocTest extends TestCase
                 'name' => 'Jack',
             ],
         ]);
+
+        $this->assertEquals([
+            'name' => 'John',
+            'brother' => [
+                'name' => 'Jack',
+            ],
+        ], $form->modelToArray());
     }
 }
