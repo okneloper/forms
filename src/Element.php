@@ -1,10 +1,8 @@
 <?php
 
 namespace Okneloper\Forms;
-use Okneloper\Forms\Filters\NativeFilter;
 use Okneloper\Forms\Filters\StringSanitizeFilter;
-use Okneloper\Forms\Observers\AttributeObserver;
-use Okneloper\Forms\Observers\ValueObserver;
+use Okneloper\Forms\Observers\Observable;
 
 /**
  * Class Element
@@ -22,6 +20,8 @@ use Okneloper\Forms\Observers\ValueObserver;
  */
 class Element implements ElementInterface
 {
+    use Observable;
+
     static protected $defaultAttributes = [];
 
     static protected $knownAttributes = [
@@ -40,8 +40,6 @@ class Element implements ElementInterface
         $class = __NAMESPACE__ . '\\Elements\\' . ucfirst($type);
         return new $class($name, $label, $attributes);
     }
-
-    protected $observers = [];
 
     protected $attributes = [];
 
@@ -230,29 +228,6 @@ class Element implements ElementInterface
     public function __toString()
     {
         return $this->render();
-    }
-
-    public function subscribe($observer)
-    {
-        $this->observers[] = $observer;
-    }
-
-    protected function triggerValueChanged($oldValue)
-    {
-        foreach ($this->observers as $observer) {
-            if ($observer instanceof ValueObserver) {
-                $observer->valueChanged($this, $oldValue);
-            }
-        }
-    }
-
-    protected function triggerAttributeChanged($name, $oldValue)
-    {
-        foreach ($this->observers as $observer) {
-            if ($observer instanceof AttributeObserver) {
-                $observer->attributeChanged($this, $name, $oldValue);
-            }
-        }
     }
 
     public function cleanName($name)
