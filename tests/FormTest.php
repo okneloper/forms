@@ -4,7 +4,7 @@ use Okneloper\Forms\Filters\NativeFilter;
 /**
  * @coversDefaultClass \Okneloper\Forms\Form
  */
-class FormTest extends PHPUnit_Framework_TestCase
+class FormTest extends TestCase
 {
     /**
      * @throws Exception
@@ -114,5 +114,18 @@ class FormTest extends PHPUnit_Framework_TestCase
         $form->submit($data);
 
         $this->assertEquals($clean, $form->modelToArray());
+    }
+
+    public function testReturnsNestedElements()
+    {
+        $form = $this->makeForm();
+
+        $form->add('text', 'test.text');
+        $this->assertInstanceOf(\Okneloper\Forms\Elements\Text::class, $form->el('test.text'));
+
+        $array = new \Okneloper\Forms\Elements\ArrayAssoc('test');
+        $array->addElement(new \Okneloper\Forms\Elements\Checkbox('checkbox'));
+        $form->addElement($array);
+        $this->assertInstanceOf(\Okneloper\Forms\Elements\Checkbox::class, $form->el('test.checkbox'));
     }
 }

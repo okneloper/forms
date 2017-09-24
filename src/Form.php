@@ -276,10 +276,16 @@ class Form
      */
     public function el($name)
     {
-        if (!isset($this->elements[$name])) {
-            throw new \Exception("Element [$name] not found on the form");
+        if (isset($this->elements[$name])) {
+            return $this->elements[$name];
         }
-        return $this->elements[$name];
+
+        if (strpos($name, '.') !== false) {
+            list($arrayName, $elName) = explode('.', $name);
+            return $this->el($arrayName)->el($elName);
+        }
+
+        throw new \Exception("Element [$name] not found on the form");
     }
 
     /**
