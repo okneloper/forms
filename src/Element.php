@@ -205,6 +205,12 @@ class Element implements ElementInterface
             return $this->value;
         }
 
+        if ($this->disabled() || $this->readonly()) {
+            // do not assign values for disabled elements, these are supposed to not be present among the form data
+            // readonly ones are... read-only, so no action required here either
+            return $this;
+        }
+
         $oldValue = $this->value;
 
         $this->value = $value;

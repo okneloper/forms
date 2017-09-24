@@ -372,11 +372,6 @@ class Form
         $data = $this->applyFilters($data);
 
         foreach ($this->elements as $el) { /* @var $el Element */
-            // do not assign values for disabled elements, these are supposed to not be present among the form data
-            if ($el->disabled()) {
-                continue;
-            }
-
             // buttons don't provide any values, so skip those as well
             if ($el instanceof Button) {
                 continue;
