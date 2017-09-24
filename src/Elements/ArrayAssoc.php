@@ -3,6 +3,7 @@
 namespace Okneloper\Forms\Elements;
 
 use Okneloper\Forms\ElementInterface;
+use Okneloper\Forms\Filters\VoidFilter;
 use Okneloper\Forms\Model;
 use Okneloper\Forms\Observers\Observable;
 
@@ -92,5 +93,10 @@ class ArrayAssoc implements ElementInterface
         }
 
         throw new \Exception("Element [$name] not found on the " . __CLASS__);
+    }
+
+    public function getDefaultFilter()
+    {
+        return new VoidFilter();
     }
 }

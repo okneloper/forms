@@ -38,4 +38,23 @@ class ArrayAssocTest extends TestCase
 
         $this->assertEquals('name', $text->id);
     }
+
+    public function testFormCanBeSubmitted()
+    {
+        $form = $this->makeForm();
+
+        $form->add('text', 'name');
+
+        $array = new ArrayAssoc('brother');
+        $array->addElement($form->makeElement('text', 'name'));
+
+        $form->addElement($array);
+
+        $form->submit([
+            'name' => 'John',
+            'brother' => [
+                'name' => 'Jack',
+            ],
+        ]);
+    }
 }
