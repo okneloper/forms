@@ -20,6 +20,17 @@ trait Observable
     }
 
     /**
+     * Returns true if element has observers.
+     * Primarily intended for testing
+     *
+     * @return bool
+     */
+    public function hasObservers()
+    {
+        return count($this->observers) > 0;
+    }
+
+    /**
      * Notify ValueObservers of a changed value
      *
      * @param mixed $oldValue

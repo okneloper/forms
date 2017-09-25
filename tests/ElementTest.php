@@ -1,6 +1,6 @@
 <?php
 
-class ElementTest extends PHPUnit_Framework_TestCase
+class ElementTest extends TestCase
 {
     /**
      * Test if name[] style names are processed correctly
@@ -73,5 +73,17 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $el->disabled(true);
         $this->assertTrue($el->disabled());
         $this->assertTrue($el->attr('disabled'));
+    }
+
+    public function testClonesWithoutObservers()
+    {
+        $observer = new \Okneloper\Forms\Observers\Observer($this->makeForm());
+        $element = new \Okneloper\Forms\Elements\Text('element');
+        $element->subscribe($observer);
+
+        $this->assertTrue($element->hasObservers());
+
+        $another = clone $element;
+        $this->assertFalse($another->hasObservers());
     }
 }

@@ -322,4 +322,9 @@ class Element implements ElementInterface
 
         throw new \BadMethodCallException("$name function not defined on " . get_class($this));
     }
+
+    public function __clone()
+    {
+        $this->observers = [];
+    }
 }
