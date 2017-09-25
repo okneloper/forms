@@ -10,9 +10,32 @@ class Checkbox extends Element
     protected $type = 'checkbox';
 
     /**
+     * Value when checkbox is checked
      * Set default value attribute as '1' for Checkbox
      */
-    protected $value = 1;
+    protected $value = '1';
+
+    /**
+     * Value when checkbox is unchecked
+     * @var string
+     */
+    protected $valueFalse = null;
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $valueFalse
+     * @return $this
+     */
+    public function setValueFalse($valueFalse)
+    {
+        $this->valueFalse = $valueFalse;
+        return $this;
+    }
 
     public function checkedIf($condition)
     {
@@ -37,7 +60,7 @@ class Checkbox extends Element
         }
 
         // when a checkbox is not checked, the value of it is null (ie not set)
-        return $this->attr('checked') ? $this->attr('value') : null;
+        return $this->attr('checked') ? $this->value : $this->valueFalse;
     }
 
     public function attr($name, $value = null)
