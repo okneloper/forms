@@ -70,11 +70,19 @@ class IlluminateValidator implements ValidatorInterface
                 $searchField = '{' . $searchField . '}';
 
                 $element = $this->form->el($fieldName);
+
+                $value = $element->val();
+
+                // ignore arrays as they cannot be put in a string
+                if (is_array($value)) {
+                    continue;
+                }
+
                 /* @var $element Element */
                 $replace = [
                     $searchField => $element->label,
                     // escape the value for safe output of html messages
-                    '{value}' => htmlspecialchars($element->val(), ENT_NOQUOTES, 'UTF-8'),
+                    '{value}' => htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8'),
                 ];
 
                 // for choice elements add option to output the text value of an option
