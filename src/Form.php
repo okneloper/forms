@@ -261,7 +261,7 @@ class Form
 
         // assign default value from bound model
         if ($this->modelAssigned() && isset($this->model->{$element->name})) {
-            $element->val($this->model->{$element->name});
+            $element->val($this->model->{$element->name}, true);
         }
 
         // add observer of "Value changed" event
@@ -329,7 +329,7 @@ class Form
 
         // assign values to already added elements
         foreach ($this->elements as $el) {
-            $el->val($model->{$el->name});
+            $el->val($model->{$el->name}, true);
         }
     }
 

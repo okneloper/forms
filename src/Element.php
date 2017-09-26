@@ -197,15 +197,16 @@ class Element implements ElementInterface
      * jQuery-like value getter/setter
      *
      * @param null $value
-     * @return mixed|$this current value or $this
+     * @param bool $force Set the value even is the element is readonly/disabled (for setting default values)
+     * @return $this|mixed current value or $this
      */
-    public function val($value = null)
+    public function val($value = null, $force = false)
     {
         if ($value === null) {
             return $this->value;
         }
 
-        if ($this->disabled() || $this->readonly()) {
+        if (($this->disabled() || $this->readonly()) && !$force) {
             // do not assign values for disabled elements, these are supposed to not be present among the form data
             // readonly ones are... read-only, so no action required here either
             return $this;
