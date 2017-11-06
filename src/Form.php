@@ -301,7 +301,7 @@ class Form
     /**
      * Returns value of the element with name $name.
      * @param $name
-     * @return string
+     * @return mixed
      */
     public function val($name)
     {
