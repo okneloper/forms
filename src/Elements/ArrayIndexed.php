@@ -77,6 +77,8 @@ class ArrayIndexed implements ElementInterface
             return $this->values;
         }
 
+        $oldValue = $this->values;
+
         $this->values = (array)$value;
 
         $this->generateElements();
