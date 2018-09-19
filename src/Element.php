@@ -197,26 +197,21 @@ class Element implements ElementInterface
      * jQuery-like value getter/setter
      *
      * @param null $value
-     * @param bool $force Set the value even is the element is readonly/disabled (for setting default values)
      * @return $this|mixed current value or $this
      */
-    public function val($value = null, $force = false)
+    public function val($value = null)
     {
         if ($value === null) {
             return $this->value;
         }
 
-        if (($this->disabled() || $this->readonly()) && !$force) {
+        if ($this->disabled() || $this->readonly()) {
             // do not assign values for disabled elements, these are supposed to not be present among the form data
             // readonly ones are... read-only, so no action required here either
             return $this;
         }
 
-        $oldValue = $this->value;
-
-        $this->value = $value;
-
-        $this->triggerValueChanged($oldValue);
+        $this->setNewValue($value);
 
         return $this;
     }
@@ -229,6 +224,17 @@ class Element implements ElementInterface
     public function setValue($value)
     {
         $this->val($value);
+        return $this;
+    }
+
+    /**
+     * Set the value even is the element is readonly/disabled (for setting default values)
+     * @param $value
+     * @return $this
+     */
+    public function forceValue($value)
+    {
+        $this->setNewValue($value);
         return $this;
     }
 
@@ -327,5 +333,17 @@ class Element implements ElementInterface
     public function __clone()
     {
         $this->observers = [];
+    }
+
+    /**
+     * @param $value
+     */
+    protected function setNewValue($value)
+    {
+        $oldValue = $this->value;
+
+        $this->value = $value;
+
+        $this->triggerValueChanged($oldValue);
     }
 }

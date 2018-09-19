@@ -49,6 +49,10 @@ class Checkbox extends Element
     public function val($value = null)
     {
         if ($value !== null) {
+            if ($this->disabled() || $this->readonly()) {
+                return $this;
+            }
+
             $oldValue = $this->attr('checked');
 
             // @todo should it be === ?
