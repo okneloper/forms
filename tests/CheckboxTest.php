@@ -50,4 +50,22 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $checkbox->val(1);
         $this->assertSame('1', $checkbox->val());
     }
+
+    public function testDoesNotChangeWhenDisabled()
+    {
+        $checkbox = new \Okneloper\Forms\Elements\Checkbox('terms');
+        $this->assertNull($checkbox->val());
+        $checkbox->disable();
+        $checkbox->val('1');
+        $this->assertNull($checkbox->val());
+    }
+
+    public function testDoesNotChangeWhenReadonly()
+    {
+        $checkbox = new \Okneloper\Forms\Elements\Checkbox('terms');
+        $this->assertNull($checkbox->val());
+        $checkbox->attr('readonly', true);
+        $checkbox->val('1');
+        $this->assertNull($checkbox->val());
+    }
 }
