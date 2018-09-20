@@ -7,6 +7,9 @@ class ArrayAssocTest extends TestCase
     public function testItCanBeCreated()
     {
         $form = $this->makeForm();
+        $form->bind([
+            'array' => [],
+        ]);
 
         $el = $form->add('arrayAssoc', 'array');
 

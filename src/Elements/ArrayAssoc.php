@@ -16,7 +16,7 @@ class ArrayAssoc implements ElementInterface
     /**
      * @var ElementInterface[]
      */
-    protected $elements;
+    protected $elements = [];
 
     /**
      * @return ElementInterface[]
@@ -57,18 +57,53 @@ class ArrayAssoc implements ElementInterface
     public function val($value = null)
     {
         if ($value === null) {
-            $model = new Model();
-            foreach ($this->elements as $element) {
-                $model->{$element->name} = $element->val();
-            }
-            return $model->toArray();
+            return $this->getValue();
         }
 
+        $this->setValue($value);
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getValue()
+    {
+        $model = new Model();
+        foreach ($this->elements as $element) {
+            $model->{$element->name} = $element->val();
+        }
+        return $model->toArray();
+    }
+
+    /**
+     * @param $value
+     */
+    protected function setValue($value)
+    {
         $oldValue = $this->val();
 
         foreach ((array)$value as $key => $val) {
             if (isset($this->elements[$key])) {
                 $this->elements[$key]->val($val);
+            }
+        }
+
+        $this->triggerValueChanged($oldValue);
+    }
+
+    /**
+     * Set the value even is the element is readonly/disabled (for setting default values)
+     * @param $value
+     * @return $this
+     */
+    public function forceValue($value)
+    {
+        $oldValue = $this->val();
+
+        foreach ((array)$value as $key => $val) {
+            if (isset($this->elements[$key])) {
+                $this->elements[$key]->forceValue($val);
             }
         }
 
