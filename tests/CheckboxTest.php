@@ -68,4 +68,14 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $checkbox->val('1');
         $this->assertNull($checkbox->val());
     }
+
+    public function testForceValueDoesNotResetValue()
+    {
+        $checkbox = new \Okneloper\Forms\Elements\Checkbox('terms');
+        $checkbox->setValue('SomeValue');
+        $checkbox->forceValue(null);
+        $this->assertEquals('SomeValue', $checkbox->attr('value'));
+        $checkbox->forceValue('');
+        $this->assertEquals('SomeValue', $checkbox->attr('value'));
+    }
 }

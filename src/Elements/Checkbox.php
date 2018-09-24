@@ -53,12 +53,7 @@ class Checkbox extends Element
                 return $this;
             }
 
-            $oldValue = $this->attr('checked');
-
-            // @todo should it be === ?
-            $this->attr('checked', $this->attr('value') == $value);
-
-            $this->triggerValueChanged($oldValue);
+            $this->checkedIf($this->attr('value') == $value);
 
             return $this;
         }
@@ -67,14 +62,25 @@ class Checkbox extends Element
         return $this->attr('checked') ? $this->value : $this->valueFalse;
     }
 
+    public function forceValue($value)
+    {
+        $this->checkedIf($this->attr('value') == $value);
+
+        return $this;
+    }
+
     public function attr($name, $value = null)
     {
-        if ($name == 'checked' && $value !== null) {
-            $oldValue = $this->attr('checked');
-            $this->attributes[$name] = $value;
-            // both val() and attr('checked', X) trigger a 'valueChanged' event
-            $this->triggerValueChanged($oldValue);
-            return $this;
+        if ($name == 'checked') {
+            if ($value === null) {
+                return !empty($this->attributes['checked']);
+            } else {
+                $oldValue = $this->attr('checked');
+                $this->attributes[$name] = $value;
+                // both val() and attr('checked', X) trigger a 'valueChanged' event
+                $this->triggerValueChanged($oldValue);
+                return $this;
+            }
         } else {
             return parent::attr($name, $value);
         }
