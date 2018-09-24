@@ -88,6 +88,12 @@ class ArrayIndexed implements ElementInterface
         return $this;
     }
 
+    public function forceValue($value)
+    {
+        return $this->val($value);
+    }
+
+
     /**
      * @param $name
      * @param null $value
