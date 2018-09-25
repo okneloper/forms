@@ -78,4 +78,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $checkbox->forceValue('');
         $this->assertEquals('SomeValue', $checkbox->attr('value'));
     }
+
+    public function testCheckedIfUpdatesModel()
+    {
+        $model = new \Okneloper\Forms\Model();
+        $form = new \Okneloper\Forms\Form($model);
+        $form->add('checkbox', 'terms')->setValueFalse(0);
+
+        $form->submit([]);
+
+        $this->assertSame(0, $model->terms);
+    }
 }

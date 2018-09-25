@@ -39,9 +39,7 @@ class Checkbox extends Element
 
     public function checkedIf($condition)
     {
-        if ($condition) {
-            $this->attr('checked', true);
-        }
+        $this->attr('checked', (bool)$condition);
 
         return $this;
     }
