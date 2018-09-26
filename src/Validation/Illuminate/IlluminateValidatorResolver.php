@@ -2,6 +2,8 @@
 
 namespace Okneloper\Forms\Validation\Illuminate;
 
+use Illuminate\Translation\ArrayLoader;
+use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory;
 use Okneloper\Forms\Form;
 use Okneloper\Forms\Validation\ValidatorResolverInterface;
@@ -97,7 +99,14 @@ class IlluminateValidatorResolver implements ValidatorResolverInterface
             return $this->app['validator'];
         }
 
-        $factory = new Factory(new IdentityTranslator(), $this->app);
+        if (isset($this->app['translator'])) {
+            $translator = $this->app['translator'];
+        } else {
+            // create a dummy translator
+            $translator = new Translator(new ArrayLoader(), 'en');
+        }
+
+        $factory = new Factory($translator, $this->app);
 
         if ($this->override !== null) {
             $factory->resolver($this->override);

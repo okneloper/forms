@@ -26,10 +26,11 @@
     "php": ">=5.5.0"
   },
   "suggest": {
-    "illuminate/validation": "Allows validating your forms with Laravel's validation package",
+    "laravel/framework": "Allows validating your forms with Laravel",
     "respect/validation": "Allows validating your forms with Respect validation package"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.0 || ^5.0"
+    "phpunit/phpunit": "^4.0 || ^5.0",
+    "laravel/framework": ">=5.2.0,<5.8.0"
   }
 }
