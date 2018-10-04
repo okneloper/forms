@@ -3,8 +3,6 @@
 
 namespace Okneloper\Forms\Elements;
 
-use Okneloper\Forms\Element;
-
 /**
  * Class Amount. Input type number with some amount-specific defaults.
  *

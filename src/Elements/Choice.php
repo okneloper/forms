@@ -57,7 +57,8 @@ class Choice extends Element
                 }
                 if (count($thisOption) == 1) {
                     // accept arrays like [value => text]
-                    list($value, $text) = each($thisOption);
+                    $value = key($thisOption);
+                    $text = current($thisOption);
                 } else {
                     // or like [value, text]
                     list($value, $text) = $thisOption;

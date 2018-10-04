@@ -2,8 +2,6 @@
 
 namespace Okneloper\Forms\Elements;
 
-use Okneloper\Forms\Element;
-
 class Date extends Text
 {
     protected $type = 'date';
@@ -60,7 +58,7 @@ class Date extends Text
     public function val($value = null)
     {
         if (is_string($value) && $value) {
-            // if value is astring and is parseable into a DateTime, then set this Datetime as Value
+            // if value is a string and is parseable into a DateTime, then set this Datetime as Value
             $dt = \DateTime::createFromFormat($this->inputFormat, $value);
             if ($dt) {
                 $value = $dt;

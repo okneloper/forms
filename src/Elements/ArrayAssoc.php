@@ -61,6 +61,8 @@ class ArrayAssoc implements ElementInterface
         }
 
         $this->setValue($value);
+
+        return $this;
     }
 
 
@@ -108,6 +110,8 @@ class ArrayAssoc implements ElementInterface
         }
 
         $this->triggerValueChanged($oldValue);
+
+        return $this;
     }
 
     /**
